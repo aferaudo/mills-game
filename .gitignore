@@ -102,3 +102,6 @@ ENV/
 
 # jetBrains Folder
 .idea
+
+# log folder
+/log
