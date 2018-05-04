@@ -62,8 +62,10 @@ def check_tris(state, move):
 
 class MillsGame(Game):
 
-    def __init__(self):
-        moves = [()]
+    def __init__(self, size=24, piece=9):
+        self.size = size
+        self.piece = piece
+        moves = [x for x in range(0, self.size)]
         self.initial = GameState(to_move='X', utility=0, board={}, moves=moves)
 
     def actions(self, state):
@@ -80,3 +82,6 @@ class MillsGame(Game):
 
     def display(self, state):
         display(self, state)
+
+    def __str__(self):
+        return '<{' + str(self.initial) + '}>'
