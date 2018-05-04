@@ -1,5 +1,5 @@
 
-from ..utilis.aima import argmax
+from ..utilis.aima_utils import argmax
 
 infinity = float('inf')
 
