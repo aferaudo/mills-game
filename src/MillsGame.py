@@ -1,12 +1,30 @@
 from core.Game import Game
 from collections import namedtuple
+from enum import Enum
 from .gameImplementations.actions import actions
 from .gameImplementations.display import display
 from .gameImplementations.result import result
 from .gameImplementations.terminal_test import terminal_test
 from .gameImplementations.utility import utility
 
-GameState = namedtuple('GameState', 'to_move, utility, board, moves')
+"""
+Game State
+to_move = rappresenta di chi è il turno corrente
+utility = 1 con la prossima mossa vinciamo, -1 perdiamo, 0 non succede
+board = rappresentazione della board
+moves = possibili mosse a partire dallo stato corrente
+w_board = pedine bianche sulla board
+b_board = pedine nere sulla board
+w_no_board = pedine bianche ancora da mettere in gioco
+b_no_board = pedine nere ancora da mettere in gioco
+"""
+GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
+
+"""
+PHASE
+Variabile GLOBALE che indica a tutti in che fase del gioco siamo
+"""
+Phase = 1
 
 
 def adjacent_locations(position):
@@ -66,7 +84,8 @@ class MillsGame(Game):
         self.size = size
         self.piece = piece
         moves = [x for x in range(0, self.size)]
-        self.initial = GameState(to_move='X', utility=0, board={}, moves=moves)
+        board = ['O' for x in range(0, self.size)]
+        self.initial = GameState(to_move='W', utility=0, board=board, moves=moves, w_board=0, b_board=0, w_no_board=self.piece, b_no_board=self.piece)
 
     def actions(self, state):
         return actions(self, state)
