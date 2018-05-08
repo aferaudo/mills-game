@@ -1,6 +1,6 @@
 
 from collections import namedtuple
-
+from .. import MillsGame
 """
 Game State
 to_move = rappresenta di chi è il turno corrente
@@ -22,13 +22,13 @@ def result(game, state, move):
     board[move] = state.to_move
     moves = list(state.moves)
     moves.remove(move)
-    if game.Phase == 1:
+    if MillsGame.Phase == 1:
         return GameState(to_move=('B' if state.to_move == 'W' else 'W'),
                          utility=0,
                          board=board,
                          moves=moves,
-                         w_board=state.w_board+1,
-                         b_board=state.b_board+1,
-                         w_no_board=state.w_no_board-1,
-                         b_no_board=state.b_no_board-1
+                         w_board=(state.w_board+1 if state.to_move == 'W' else state.w_board),
+                         b_board=(state.b_board+1 if state.to_move == 'B' else state.b_board),
+                         w_no_board=(state.w_no_board-1 if state.to_move == 'W' else state.w_no_board),
+                         b_no_board=(state.b_no_board-1 if state.to_move == 'B' else state.b_no_board)
                          )
