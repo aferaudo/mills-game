@@ -28,7 +28,7 @@ def result(game, state, move):
 
     if MillsGame.Phase == 1:
         return GameState(to_move=('B' if state.to_move == 'W' else 'W'),
-                         utility=0,
+                         utility=compute_utility(game, state),
                          board=board,
                          moves=moves,
                          w_board=(state.w_board+1 if state.to_move == 'W' else state.w_board),
@@ -38,3 +38,22 @@ def result(game, state, move):
                          )
 
     return None
+
+
+def compute_utility(game, state):
+    """If 'X' wins with this move, return 1; if 'O' wins return -1; else return 0.
+    É provvisoria solo per la fase 1
+    """
+    if MillsGame.Phase == 1:
+        if state.w_no_board == 0 and state.b_no_board == 0:
+            return 1 if state.to_move == 'W' else -1
+        else:
+            return 0
+
+    else:
+        if state.to_move == 'W' and state.b_no_board == 0 and state.b_board == 0:
+            return 1
+        elif state.to_move == 'B' and state.w_no_board == 0 and state.w_board == 0:
+            return -1
+        else:
+            return 0
