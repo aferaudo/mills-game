@@ -22,6 +22,10 @@ def result(game, state, move):
     board[move] = state.to_move
     moves = list(state.moves)
     moves.remove(move)
+    # Check phase
+    if state.w_no_board == 0 and state.b_no_board == 0:
+        MillsGame.Phase = 2
+
     if MillsGame.Phase == 1:
         return GameState(to_move=('B' if state.to_move == 'W' else 'W'),
                          utility=0,
@@ -32,3 +36,5 @@ def result(game, state, move):
                          w_no_board=(state.w_no_board-1 if state.to_move == 'W' else state.w_no_board),
                          b_no_board=(state.b_no_board-1 if state.to_move == 'B' else state.b_no_board)
                          )
+
+    return None

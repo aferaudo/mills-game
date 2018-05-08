@@ -4,12 +4,8 @@ from .. import MillsGame
 
 def actions(game, state):
 
-    if state.to_move == 'W' and state.w_no_board != 0:
-        MillsGame.Phase = 1
-        return state.moves
-
-    if state.to_move == 'B' and state.b_no_board != 0:
-        MillsGame.Phase = 1
-        return state.moves
-
-    MillsGame.Phase = 0
+    if MillsGame.Phase == 1:
+        print()
+        if state.w_board == 0 and state.b_board == 0:
+            return
+    return state.moves
