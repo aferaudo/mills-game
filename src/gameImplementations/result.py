@@ -1,7 +1,6 @@
 
 from collections import namedtuple
 
-
 """
 Game State
 to_move = rappresenta di chi è il turno corrente
@@ -23,12 +22,13 @@ def result(game, state, move):
     board[move] = state.to_move
     moves = list(state.moves)
     moves.remove(move)
-    return GameState(to_move=('B' if state.to_move == 'W' else 'W'),
-                     utility=0,
-                     board=board,
-                     moves=moves,
-                     w_board=0,
-                     b_board=0,
-                     w_no_board=9,
-                     b_no_board=9
-                     )
+    if game.Phase == 1:
+        return GameState(to_move=('B' if state.to_move == 'W' else 'W'),
+                         utility=0,
+                         board=board,
+                         moves=moves,
+                         w_board=state.w_board+1,
+                         b_board=state.b_board+1,
+                         w_no_board=state.w_no_board-1,
+                         b_no_board=state.b_no_board-1
+                         )
