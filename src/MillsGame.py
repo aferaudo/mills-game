@@ -1,6 +1,5 @@
 from core.Game import Game
 from collections import namedtuple
-from enum import Enum
 from .gameImplementations.actions import actions
 from .gameImplementations.display import display
 from .gameImplementations.result import result
@@ -19,12 +18,6 @@ w_no_board = pedine bianche ancora da mettere in gioco
 b_no_board = pedine nere ancora da mettere in gioco
 """
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
-
-"""
-PHASE
-Variabile GLOBALE che indica a tutti in che fase del gioco siamo
-"""
-Phase = 1
 
 
 def adjacent_locations(position):
@@ -81,6 +74,12 @@ def check_tris(state, move):
 class MillsGame(Game):
 
     def __init__(self, size=24, piece=9):
+        """
+        PHASE
+        Variabile GLOBALE che indica a tutti in che fase del gioco siamo
+        """
+        global Phase
+        Phase = 1
         self.size = size
         self.piece = piece
         moves = [x for x in range(0, self.size)]

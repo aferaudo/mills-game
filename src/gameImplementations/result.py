@@ -1,6 +1,19 @@
 
 from collections import namedtuple
-from ..MillsGame import GameState
+
+
+"""
+Game State
+to_move = rappresenta di chi è il turno corrente
+utility = 1 con la prossima mossa vinciamo, -1 perdiamo, 0 non succede
+board = rappresentazione della board
+moves = possibili mosse a partire dallo stato corrente
+w_board = pedine bianche sulla board
+b_board = pedine nere sulla board
+w_no_board = pedine bianche ancora da mettere in gioco
+b_no_board = pedine nere ancora da mettere in gioco
+"""
+GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
 
 def result(game, state, move):
@@ -10,8 +23,12 @@ def result(game, state, move):
     board[move] = state.to_move
     moves = list(state.moves)
     moves.remove(move)
-    return GameState(to_move=('W' if state.to_move == 'B' else 'W'),
-                     utility=game.compute_utility(board, move, state.to_move),
+    return GameState(to_move=('B' if state.to_move == 'W' else 'W'),
+                     utility=0,
                      board=board,
-                     moves=moves
+                     moves=moves,
+                     w_board=0,
+                     b_board=0,
+                     w_no_board=9,
+                     b_no_board=9
                      )
