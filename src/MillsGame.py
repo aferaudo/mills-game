@@ -79,10 +79,11 @@ class MillsGame(Game):
     def __init__(self, size=24, piece=9):
         """
         PHASE
-        Variabile GLOBALE che indica a tutti in che fase del gioco siamo
+        Proprietà che indica a tutti in che fase del gioco siamo
         """
-        global Phase
-        Phase = 1
+        # global Phase
+        # Phase = 1
+        self.Phase = 1
         self.size = size
         self.piece = piece
         moves = [x for x in range(0, self.size)]
@@ -106,3 +107,18 @@ class MillsGame(Game):
 
     def __str__(self):
         return '<{' + str(self.initial) + '}>'
+
+    def player_pieces(self, state, player=None):
+        """
+        Restituisce le pedine del giocatore, se :param player non è passato restituisce le pedine del giocatore
+        dello stato corrente, altrimenti del giocatore passato tramite il parametro
+        :param state:
+        :param player:
+        :return:
+        """
+        player = player if player is not None else state.to_move
+        pieces = []
+        for index, value in enumerate(state.board):
+            if value == player:
+                pieces.append(index)
+        return pieces

@@ -22,29 +22,38 @@ def result(game, state, move):
     board[move] = state.to_move
     moves = list(state.moves)
     moves.remove(move)
+
+    new_state = None
+
     # Check phase
     if state.w_no_board == 0 and state.b_no_board == 0:
-        MillsGame.Phase = 2
+        game.Phase = 2
 
-    if MillsGame.Phase == 1:
-        return GameState(to_move=('B' if state.to_move == 'W' else 'W'),
-                         utility=compute_utility(game, state),
-                         board=board,
-                         moves=moves,
-                         w_board=(state.w_board+1 if state.to_move == 'W' else state.w_board),
-                         b_board=(state.b_board+1 if state.to_move == 'B' else state.b_board),
-                         w_no_board=(state.w_no_board-1 if state.to_move == 'W' else state.w_no_board),
-                         b_no_board=(state.b_no_board-1 if state.to_move == 'B' else state.b_no_board)
-                         )
+    if game.Phase == 1:
+        new_state = GameState(to_move=('B' if state.to_move == 'W' else 'W'),
+                              utility=compute_utility(game, state),
+                              board=board,
+                              moves=moves,
+                              w_board=(state.w_board + 1 if state.to_move == 'W' else state.w_board),
+                              b_board=(state.b_board + 1 if state.to_move == 'B' else state.b_board),
+                              w_no_board=(state.w_no_board - 1 if state.to_move == 'W' else state.w_no_board),
+                              b_no_board=(state.b_no_board - 1 if state.to_move == 'B' else state.b_no_board)
+                              )
 
-    return None
+    # Prima di fare il return del nuovo stato è necessario calcolare la phase,
+    # perchè al termine della result la phase deve essere già a due se con questo mossa entriamo nella seconda phase
+
+    if new_state.w_no_board == 0 and new_state.b_no_board == 0:
+        game.Phase = 2
+
+    return new_state
 
 
 def compute_utility(game, state):
     """If 'X' wins with this move, return 1; if 'O' wins return -1; else return 0.
     É provvisoria solo per la fase 1
     """
-    if MillsGame.Phase == 1:
+    if game.Phase == 1:
         if state.w_no_board == 0 and state.b_no_board == 0:
             return 1 if state.to_move == 'W' else -1
         else:
