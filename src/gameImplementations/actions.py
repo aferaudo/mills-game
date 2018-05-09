@@ -21,8 +21,11 @@ def actions(game, state):
                 moves.extend(MillsGame.adjacent_locations(index))
 
         moves = list(set(moves))  # set serve per rimuovere i duplicati
-        # Prendo le pedine dell'avversario per toglierle tra le moves che sto restituendo
-        other_player_pieces = game.player_pieces(state, ('W' if player == 'B' else 'B'))
-        return list(set(moves) - set(other_player_pieces))
+
+        for i, v in enumerate(state.board):
+            if i in moves and v != 'O':
+                moves.remove(i)
+
+        return moves
 
     return moves
