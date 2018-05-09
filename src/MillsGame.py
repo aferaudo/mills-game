@@ -20,8 +20,8 @@ b_no_board = pedine nere ancora da mettere in gioco
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
 
-def adjacent_locations(position):
-    adiacent = [
+def locations():
+    return [
         [1, 9],  # 0
         [0, 2, 4],  # 1
         [1, 14],  # 2
@@ -47,7 +47,10 @@ def adjacent_locations(position):
         [14, 22]  # 23
     ]
 
-    return adiacent[position]
+
+def adjacent_locations(position):
+
+    return locations()[position]
 
 
 def check_tris(state, move):

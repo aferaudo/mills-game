@@ -6,7 +6,9 @@ millsGame = MillsGame(24, 1)
 millsGame.display(millsGame.initial)
 print(millsGame)
 
-newState = millsGame.result(millsGame.initial, 0)
+move = millsGame.actions(millsGame.initial)[0]
+
+newState = millsGame.result(millsGame.initial, move)
 millsGame.display(newState)
 print(newState)
 
