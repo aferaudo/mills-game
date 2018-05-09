@@ -49,13 +49,8 @@ def locations():
     ]
 
 
-def adjacent_locations(position):
-
-    return locations()[position]
-
-
-def check_tris(state, move):
-    tris = [
+def all_tris():
+    return [
         [0, 1, 2],
         [0, 9, 21],
         [2, 14, 23],
@@ -73,6 +68,16 @@ def check_tris(state, move):
         [12, 13, 14],
         [16, 19, 22]
     ]
+
+
+def adjacent_locations(position):
+
+    return locations()[position]
+
+
+def check_tris(state, move):
+    tris = all_tris()
+    # TODO bisogna implementare la logica che controlla il tris
 
 
 class MillsGame(Game):
