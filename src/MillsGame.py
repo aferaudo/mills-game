@@ -75,12 +75,13 @@ def adjacent_locations(position):
     return locations()[position]
 
 
-def check_tris_on_board(game, state, player=None):
+def check_tris_on_board(game, state, player=None, count_check=3):
     """
     Restituisce la lista dei tris fatti sulla board
     :param game:
     :param state:
     :param player:
+    :param count_check:
     :return tris_done:
     """
     player_pieces = game.player_pieces(state, player)
@@ -90,12 +91,42 @@ def check_tris_on_board(game, state, player=None):
         for pos in tris:
             if pos in player_pieces:
                 count += 1
-        if count == 3:
+        if count == count_check:
             tris_done.append(tris)
 
     return tris_done
 
 
+def will_tris(game, state, player=None):
+
+    tris = []
+    if game.Phase == 1:
+        tris.extend(check_tris_on_board(game, state, player, 2))
+    else:
+        print()
+        # TODO Prima facciamo la result della Phase 2
+        # Vogliamo simulare l'aggiornamento di stato usando game.result e poi controlliamo se nel nuovo stato si
+        # verifica un tris, ma prima devo salvare i tris che ho già
+
+    return tris
+
+
+def can_move(game, state, player=None):
+    player = player if player is not None else state.to_move
+    moves = []
+    for index, value in enumerate(state.board):
+        if value == player:
+            moves.extend(adjacent_locations(index))
+
+    for i, v in enumerate(state.board):
+        if i in moves and v != 'O':
+            moves.remove(i)
+
+    if game.Phase == 1:
+        # solo se sono nella fase 1 rimuovo i duplicati
+        moves = list(set(moves))  # set serve per rimuovere i duplicati
+
+    return moves
 
 
 class MillsGame(Game):

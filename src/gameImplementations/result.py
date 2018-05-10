@@ -18,11 +18,8 @@ GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_
 def result(game, state, move):
     if move not in state.moves:
         return state  # Illegal move has no effect
-    board = state.board.copy()
-    board[move] = state.to_move
-    moves = list(state.moves)
-    moves.remove(move)
 
+    board = state.board.copy()
     new_state = None
 
     # Check phase
@@ -30,6 +27,9 @@ def result(game, state, move):
         game.Phase = 2
 
     if game.Phase == 1:
+        board[move] = state.to_move
+        moves = list(state.moves)
+        moves.remove(move)
         new_state = GameState(to_move=('B' if state.to_move == 'W' else 'W'),
                               utility=compute_utility(game, state),
                               board=board,
@@ -39,6 +39,9 @@ def result(game, state, move):
                               w_no_board=(state.w_no_board - 1 if state.to_move == 'W' else state.w_no_board),
                               b_no_board=(state.b_no_board - 1 if state.to_move == 'B' else state.b_no_board)
                               )
+    elif game.Phase == 2:
+        print()
+        # TODO prima dobbiamo modificare la can_move
 
     # Prima di fare il return del nuovo stato è necessario calcolare la phase,
     # perchè al termine della result la phase deve essere già a due se con questo mossa entriamo nella seconda phase

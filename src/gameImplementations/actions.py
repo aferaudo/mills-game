@@ -26,17 +26,7 @@ def actions(game, state):
     if game.Phase == 2:
         # Prendo le mie pedine e direttamente metto nelle moves solo le possibili moves che sono adiacenti alle mie
         # Il for potrebbe essere ottimizzato o quantomeno reso in line
-        moves = []
-        for index, value in enumerate(state.board):
-            if value == player:
-                moves.extend(MillsGame.adjacent_locations(index))
 
-        moves = list(set(moves))  # set serve per rimuovere i duplicati
-
-        for i, v in enumerate(state.board):
-            if i in moves and v != 'O':
-                moves.remove(i)
-
-        return moves
+        return MillsGame.can_move(game, state, player)
 
     return moves
