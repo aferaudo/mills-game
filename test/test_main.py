@@ -1,5 +1,5 @@
 
-from src.MillsGame import MillsGame, check_tris_on_board
+from src.MillsGame import MillsGame, can_move
 import random
 
 
@@ -60,8 +60,19 @@ phase_one_state = test_phase_one(millsGame, True)
 
 print("********* PHASE 2 *********")
 print("Test game.actions() for player " + phase_one_state.to_move + ": ")
-print(millsGame.actions(phase_one_state))
 
-#print(millsGame.player_pieces(phase_one_state))
-#print(check_tris_on_board(millsGame, phase_one_state))
-#print(check_tris_on_board(millsGame, phase_one_state, "B"))
+player_actions = millsGame.actions(phase_one_state)
+print(player_actions)
+
+phase_two_state_1 = millsGame.result(phase_one_state, player_actions[0])
+print_current_move(millsGame, phase_one_state, phase_two_state_1, player_actions[0], 1)
+
+player_actions = millsGame.actions(phase_two_state_1)
+phase_two_state_2 = millsGame.result(phase_two_state_1, player_actions[0])
+print_current_move(millsGame, phase_two_state_1, phase_two_state_2, player_actions[0], 2)
+
+# print(can_move(millsGame, phase_one_state, 'B'))
+
+# print(millsGame.player_pieces(phase_one_state))
+# print(check_tris_on_board(millsGame, phase_one_state))
+# print(check_tris_on_board(millsGame, phase_one_state, "B"))

@@ -20,7 +20,7 @@ def actions(game, state):
     if game.Phase == 1:
         if state.w_board == 0 and state.b_board == 0:
             # Se è la prima mossa facciamo solo una di queste 4 (si potrebbe anche mandarne una sola)
-            return [4, 10, 13, 19]
+            return [4]
         # TODO Manca tutta la logica vera della phase 1
 
     if game.Phase == 2:

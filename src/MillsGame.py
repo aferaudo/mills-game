@@ -113,18 +113,13 @@ def will_tris(game, state, player=None):
 
 def can_move(game, state, player=None):
     player = player if player is not None else state.to_move
+
     moves = []
     for index, value in enumerate(state.board):
         if value == player:
-            moves.extend(adjacent_locations(index))
-
-    for i, v in enumerate(state.board):
-        if i in moves and v != 'O':
-            moves.remove(i)
-
-    if game.Phase == 1:
-        # solo se sono nella fase 1 rimuovo i duplicati
-        moves = list(set(moves))  # set serve per rimuovere i duplicati
+            for pos in adjacent_locations(index):
+                if state.board[pos] == 'O':
+                    moves.append(tuple((index, pos)))
 
     return moves
 
