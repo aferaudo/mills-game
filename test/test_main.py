@@ -1,9 +1,14 @@
 
-from src.MillsGame import MillsGame
+from src.MillsGame import MillsGame, check_tris_on_board
 import random
 
 
 def get_random(extracted):
+    """
+    Restituisce un numero random evitando le collisioni
+    :param extracted:
+    :return random:
+    """
     index_not_found = True
     index = None
     while index_not_found:
@@ -47,6 +52,8 @@ def test_phase_one(game, use_random=False):
 
         return current_state
 
+# BODY TEST
+
 
 millsGame = MillsGame()
 phase_one_state = test_phase_one(millsGame, True)
@@ -54,3 +61,7 @@ phase_one_state = test_phase_one(millsGame, True)
 print("********* PHASE 2 *********")
 print("Test game.actions() for player " + phase_one_state.to_move + ": ")
 print(millsGame.actions(phase_one_state))
+
+print(millsGame.player_pieces(phase_one_state))
+print(check_tris_on_board(millsGame, phase_one_state))
+print(check_tris_on_board(millsGame, phase_one_state, "B"))

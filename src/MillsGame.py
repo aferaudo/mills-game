@@ -75,9 +75,27 @@ def adjacent_locations(position):
     return locations()[position]
 
 
-def check_tris(state, move):
-    tris = all_tris()
-    # TODO bisogna implementare la logica che controlla il tris
+def check_tris_on_board(game, state, player=None):
+    """
+    Restituisce la lista dei tris fatti sulla board
+    :param game:
+    :param state:
+    :param player:
+    :return tris_done:
+    """
+    player_pieces = game.player_pieces(state, player)
+    tris_done = []
+    for tris in all_tris():
+        count = 0
+        for pos in tris:
+            if pos in player_pieces:
+                count += 1
+        if count == 3:
+            tris_done.append(tris)
+
+    return tris_done
+
+
 
 
 class MillsGame(Game):
