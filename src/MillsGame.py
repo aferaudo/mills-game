@@ -15,7 +15,7 @@ moves = possibili mosse a partire dallo stato corrente
 w_board = pedine bianche sulla board
 b_board = pedine nere sulla board
 w_no_board = pedine bianche ancora da mettere in gioco
-b_no_board = pedine nere ancora da mettere in gioco
+b_no_board = pedine n ere ancora da mettere in gioco
 """
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
@@ -102,6 +102,7 @@ def will_tris(game, state, player=None):
     tris = []
     if game.Phase == 1:
         tris.extend(check_tris_on_board(game, state, player, 2))
+        # TODO Controllare che il terzo vicino sia vuoto
     else:
         print()
         # TODO Prima facciamo la result della Phase 2
@@ -112,6 +113,13 @@ def will_tris(game, state, player=None):
 
 
 def can_move(game, state, player=None):
+    """
+    restituisce una lista di tuple come (posizione corrente, mossa possibile)
+    :param game:
+    :param state:
+    :param player:
+    :return:
+    """
     player = player if player is not None else state.to_move
 
     moves = []

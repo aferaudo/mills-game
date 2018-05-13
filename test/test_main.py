@@ -62,12 +62,15 @@ print("********* PHASE 2 *********")
 print("Test game.actions() for player " + phase_one_state.to_move + ": ")
 
 player_actions = millsGame.actions(phase_one_state)
+print(phase_one_state.to_move + ": ")
 print(player_actions)
 
 phase_two_state_1 = millsGame.result(phase_one_state, player_actions[0])
 print_current_move(millsGame, phase_one_state, phase_two_state_1, player_actions[0], 1)
 
 player_actions = millsGame.actions(phase_two_state_1)
+print(phase_two_state_1.to_move + ": ")
+print(player_actions)
 phase_two_state_2 = millsGame.result(phase_two_state_1, player_actions[0])
 print_current_move(millsGame, phase_two_state_1, phase_two_state_2, player_actions[0], 2)
 

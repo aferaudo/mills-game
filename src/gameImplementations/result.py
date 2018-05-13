@@ -16,6 +16,13 @@ GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_
 
 
 def result(game, state, move):
+    """
+    Prende in ingresso lo stato della board e la mossa fatta, controllando se è valida.
+    :param game:
+    :param state:
+    :param move:
+    :return: new_state
+    """
 
     # TODO quando la fase 1 sarà operativa non servirà questo doppio if (Forse)
     if game.Phase == 1:
