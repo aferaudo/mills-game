@@ -88,10 +88,15 @@ print_current_move(millsGame, phase_two_state_2, phase_two_state_3, tup, 3)"""
 
 # Prova can_eliminate
 
-to_eliminate = can_eliminate(millsGame, phase_two_state_2, phase_two_state_2.to_move)
-print("Pedine eliminabili da opposto di : " + phase_two_state_2.to_move)
+to_eliminate = can_eliminate(millsGame, phase_two_state_2, 'B' if phase_two_state_2.to_move == 'W' else 'W')
+print("Pedine eliminabili da : " + phase_two_state_2.to_move)
 print(to_eliminate)
-
+print("Turno di : " + phase_two_state_2.to_move)
+x = int(input("Inserisci pedina da muovere "))
+y = int(input("Inserisci la mossa "))
+tup = (x, y, to_eliminate[0])
+phase_two_state_3 = millsGame.result(phase_two_state_2, tup)
+millsGame.display(phase_two_state_3)
 # print(can_move(millsGame, phase_one_state, 'B'))
 
 # print(millsGame.player_pieces(phase_one_state))

@@ -57,6 +57,18 @@ def result(game, state, move):
         # move [1] = posizionamento finale
         # print(move)
         player = ('B' if state.to_move == 'W' else 'W')
+
+        # Se il campo numero tre è diverso da -1 significa che è stato fatto un tris e quindi
+        # devo eliminare una pedina dell'avversario
+        new_w_board = state.w_board
+        new_b_board = state.b_board
+        if move[2] != -1:
+            board[move[2]] = 'O'
+            if state.to_move == 'B':
+                new_w_board = state.w_board - 1
+            else:
+                new_b_board = state.b_board - 1
+
         board[move[0]] = 'O'
         board[move[1]] = state.to_move
         moves = list(state.moves)
@@ -65,8 +77,8 @@ def result(game, state, move):
                               utility=compute_utility(game, state),
                               board=board,
                               moves=moves,
-                              w_board=state.w_board,
-                              b_board=state.b_board,
+                              w_board=new_w_board,
+                              b_board=new_b_board,
                               w_no_board=0,
                               b_no_board=0
                               )
