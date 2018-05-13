@@ -21,6 +21,10 @@ GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_
 
 
 def locations():
+    """
+    restituisce una lista contenente tutte le posizioni adiacenti alle diverse posizioni possibili sulla board
+    :return:
+    """
     return [
         [1, 9],  # 0
         [0, 2, 4],  # 1
@@ -50,6 +54,10 @@ def locations():
 
 
 def all_tris():
+    """
+    restituisce una lista contenente tutti i possibili tris che si possono formare sulla board
+    :return:
+    """
     return [
         [0, 1, 2],
         [0, 9, 21],
@@ -71,7 +79,11 @@ def all_tris():
 
 
 def adjacent_locations(position):
-
+    """
+    prende in ingresso una posizione e restituisce le sue adiacenti
+    :param position:
+    :return:
+    """
     return locations()[position]
 
 
@@ -99,7 +111,13 @@ def check_tris_on_board(game, state, player=None, count_check=3):
 
 # TODO Non siamo sicuri che questo sia un metodo realmente utile
 def will_tris(game, state, player=None):
-
+    """
+    restituisce una lista contenente le mosse che se fatte portano ad un tris
+    :param game:
+    :param state:
+    :param player:
+    :return:
+    """
     tris = []
     if game.Phase == 1:
         tris.extend(check_tris_on_board(game, state, player, 2))
