@@ -74,6 +74,18 @@ print(player_actions)
 phase_two_state_2 = millsGame.result(phase_two_state_1, player_actions[0])
 print_current_move(millsGame, phase_two_state_1, phase_two_state_2, player_actions[0], 2)
 
+# Stampe prova check_tris
+player_actions = millsGame.actions(phase_two_state_2)
+print(phase_two_state_2.to_move + ": ")
+print(player_actions)
+x = int(input("Inserisci pedina da muovere "))
+y = int(input("Inserisci la mossa "))
+tup = (x, y)
+phase_two_state_3 = millsGame.result(phase_two_state_2, tup)
+print_current_move(millsGame, phase_two_state_2, phase_two_state_3, tup, 3)
+
+
+
 # print(can_move(millsGame, phase_one_state, 'B'))
 
 # print(millsGame.player_pieces(phase_one_state))

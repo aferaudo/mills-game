@@ -97,6 +97,7 @@ def check_tris_on_board(game, state, player=None, count_check=3):
     return tris_done
 
 
+# TODO Non siamo sicuri che questo sia un metodo realmente utile
 def will_tris(game, state, player=None):
 
     tris = []
@@ -112,9 +113,33 @@ def will_tris(game, state, player=None):
     return tris
 
 
+def check_tris(board, pos_fin, player):
+    """
+    Controlla se con la mossa da effettuare si realizza un tris
+    :param board:
+    :param pos_fin:
+    :param player:
+    :return: boolean
+    """
+    temp = list(board)
+    temp[pos_fin] = player
+
+    for tris in all_tris():
+        if pos_fin in tris:
+            count = 0
+            for pos in tris:
+                if temp[pos] == player:
+                    count += 1
+                if count == 3:
+                    return True
+
+    return False
+
+
 def can_move(game, state, player=None):
     """
-    restituisce una lista di tuple come (posizione corrente, mossa possibile)
+    restituisce una lista di tuple come (posizione corrente, mossa possibile, boolean che stabilisce se con quella
+    mossa faccio tris)
     :param game:
     :param state:
     :param player:
@@ -127,7 +152,7 @@ def can_move(game, state, player=None):
         if value == player:
             for pos in adjacent_locations(index):
                 if state.board[pos] == 'O':
-                    moves.append(tuple((index, pos)))
+                        moves.append(tuple((index, pos)))
 
     return moves
 

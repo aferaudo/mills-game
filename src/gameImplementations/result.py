@@ -40,6 +40,9 @@ def result(game, state, move):
         game.Phase = 2
 
     if game.Phase == 1:
+        if MillsGame.check_tris(board, move, state.to_move):
+            print("Con questa mossa: " + str(move) + " il " + state.to_move + " ha fatto un TRIS")
+
         board[move] = state.to_move
         moves = list(state.moves)
         moves.remove(move)
@@ -55,7 +58,10 @@ def result(game, state, move):
     elif game.Phase == 2:
         # move [0] = pedina da muovere
         # move [1] = posizionamento finale
-        print(move)
+        # print(move)
+        if MillsGame.check_tris(board, move[1], state.to_move):
+            print("Con questa mossa: " + str(move[1]) + " il " + state.to_move + " ha fatto un TRIS")
+         
         board[move[0]] = 'O'
         board[move[1]] = state.to_move
         moves = list(state.moves)
