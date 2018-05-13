@@ -36,17 +36,25 @@ def result(game, state, move):
     new_state = None
 
     # Check phase
-    if state.w_no_board == 0 and state.b_no_board == 0:
-        game.Phase = 2
+    # if state.w_no_board == 0 and state.b_no_board == 0:
+      # game.Phase = 2
 
     if game.Phase == 1:
+        player = 'B' if state.to_move == 'W' else 'W'
         if MillsGame.check_tris(board, move, state.to_move):
             print("Con questa mossa: " + str(move) + " il " + state.to_move + " ha fatto un TRIS")
+            # Scelgo la pedina da eliminare, tenendo in considerazione che le pedine che sono in tris
+            # non possono essere eliminate
+
+            # Devo considerare le pedine dell'avversario e per evitare di eliminare pedine che sono in tris
+            # uso il metodo check_tris_on_board
+            not_removable = MillsGame.check_tris_on_board(game, state, player)
+            
 
         board[move] = state.to_move
         moves = list(state.moves)
         moves.remove(move)
-        new_state = GameState(to_move=('B' if state.to_move == 'W' else 'W'),
+        new_state = GameState(to_move=player,
                               utility=compute_utility(game, state),
                               board=board,
                               moves=moves,
@@ -61,7 +69,8 @@ def result(game, state, move):
         # print(move)
         if MillsGame.check_tris(board, move[1], state.to_move):
             print("Con questa mossa: " + str(move[1]) + " il " + state.to_move + " ha fatto un TRIS")
-         
+            # TODO Scegliere pedina da eliminare
+
         board[move[0]] = 'O'
         board[move[1]] = state.to_move
         moves = list(state.moves)
