@@ -19,9 +19,13 @@ def actions(game, state):
 
     if game.Phase == 1:
         if state.w_board == 0 and state.b_board == 0:
-            # Se è la prima mossa facciamo solo una di queste 4 (si potrebbe anche mandarne una sola)
             return [4]
-        # TODO Manca tutta la logica vera della phase 1
+        elif state.w_board < 3 and state.b_board < 3:
+            # TODO Ancora non è possibile fare dei tris come ci comportiamo?
+            print()
+        else:
+            # TODO fare la will_tris per scegliere la casella migliore
+            print()
 
     if game.Phase == 2:
         # Prendo le mie pedine e direttamente metto nelle moves solo le possibili moves che sono adiacenti alle mie

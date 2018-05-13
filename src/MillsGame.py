@@ -131,7 +131,7 @@ def will_tris(game, state, player=None):
     return tris
 
 
-def check_tris(board, pos_fin, player):
+def check_tris(board, old_pos, pos_fin, player):
     """
     Controlla se con la mossa da effettuare si realizza un tris
     :param board:
@@ -139,25 +139,42 @@ def check_tris(board, pos_fin, player):
     :param player:
     :return: boolean
     """
-    temp = list(board)
-    temp[pos_fin] = player
-
     for tris in all_tris():
         if pos_fin in tris:
             count = 0
             for pos in tris:
-                if temp[pos] == player:
+                if pos != pos_fin and board[pos] == player and old_pos != pos:
                     count += 1
-                if count == 3:
+                if count == 2:
                     return True
 
     return False
 
 
+def can_eliminate(game, state, player):
+    """
+    prende in ingresso lo stato il giocatore che deve muovere
+    restituisce tutte le pedine dell'aversario che si possono eliminare
+    :param game:
+    :param state:
+    :param player:
+    :return:
+    """
+    opponent_pieces = game.player_pieces(state, player)
+    tris_done = check_tris_on_board(game, state, player)
+    not_removable = []
+    for tris in tris_done:
+        for x in tris:
+            not_removable.append(x)
+
+    removable = list(set(opponent_pieces) - set(not_removable))
+
+    return removable
+
+
 def can_move(game, state, player=None):
     """
-    restituisce una lista di tuple come (posizione corrente, mossa possibile, boolean che stabilisce se con quella
-    mossa faccio tris)
+    restituisce una lista di tuple come (posizione corrente, mossa possibile, pedine dell'avversario che posso eliminare)
     :param game:
     :param state:
     :param player:
@@ -166,11 +183,16 @@ def can_move(game, state, player=None):
     player = player if player is not None else state.to_move
 
     moves = []
+    removable = can_eliminate(game, state, 'B' if state.to_move == 'W' else 'W')
     for index, value in enumerate(state.board):
         if value == player:
             for pos in adjacent_locations(index):
                 if state.board[pos] == 'O':
-                        moves.append(tuple((index, pos)))
+                    if check_tris(state.board, index, pos, player):
+                        for r in removable:
+                            moves.append(tuple((index, pos, r)))
+                    else:
+                        moves.append(tuple((index, pos, -1)))
 
     return moves
 
