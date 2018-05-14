@@ -38,14 +38,19 @@ def test_phase_one(game, use_random=False):
 
         first_move = game.actions(current_state)[0]
         extracted.append(first_move)
-        current_state = game.result(current_state, first_move)
+        current_state = game.result(current_state, tuple((first_move, 0)))
 
         print_current_move(game, game.initial, current_state, first_move, 1)
 
         iteration = 2
         while game.Phase == 1:
-            next_move = get_random(extracted)
-            extracted.append(next_move)
+            if current_state.to_move == 'W':
+                possible_moves = game.actions(current_state)
+                next_move = possible_moves[0]
+            else:
+                next_move = get_random(extracted)
+                extracted.append(next_move)
+                next_move = tuple((next_move, 0))
             old_state = current_state
             current_state = game.result(old_state, next_move)
             print_current_move(game, old_state, current_state, next_move, iteration)
@@ -59,21 +64,24 @@ def test_phase_one(game, use_random=False):
 millsGame = MillsGame()
 phase_one_state = test_phase_one(millsGame, True)
 
-print("********* PHASE 2 *********")
-print("Test game.actions() for player " + phase_one_state.to_move + ": ")
+print("Le nostre actions per il giocatore " + phase_one_state.to_move)
+print(millsGame.actions(phase_one_state))
 
-player_actions = millsGame.actions(phase_one_state)
-print(phase_one_state.to_move + ": ")
-print(player_actions)
-
-phase_two_state_1 = millsGame.result(phase_one_state, player_actions[0])
-print_current_move(millsGame, phase_one_state, phase_two_state_1, player_actions[0], 1)
-
-player_actions = millsGame.actions(phase_two_state_1)
-print(phase_two_state_1.to_move + ": ")
-print(player_actions)
-phase_two_state_2 = millsGame.result(phase_two_state_1, player_actions[0])
-print_current_move(millsGame, phase_two_state_1, phase_two_state_2, player_actions[0], 2)
+# print("********* PHASE 2 *********")
+# print("Test game.actions() for player " + phase_one_state.to_move + ": ")
+#
+# player_actions = millsGame.actions(phase_one_state)
+# print(phase_one_state.to_move + ": ")
+# print(player_actions)
+#
+# phase_two_state_1 = millsGame.result(phase_one_state, player_actions[0])
+# print_current_move(millsGame, phase_one_state, phase_two_state_1, player_actions[0], 1)
+#
+# player_actions = millsGame.actions(phase_two_state_1)
+# print(phase_two_state_1.to_move + ": ")
+# print(player_actions)
+# phase_two_state_2 = millsGame.result(phase_two_state_1, player_actions[0])
+# print_current_move(millsGame, phase_two_state_1, phase_two_state_2, player_actions[0], 2)
 
 
 # Stampe prova check_tris
@@ -88,21 +96,21 @@ print_current_move(millsGame, phase_two_state_2, phase_two_state_3, tup, 3)"""
 
 # Prova can_eliminate
 
-to_eliminate = can_eliminate(millsGame, phase_two_state_2)
-print("Pedine eliminabili da : " + phase_two_state_2.to_move)
-print(to_eliminate)
-print("Turno di : " + phase_two_state_2.to_move)
-x = int(input("Inserisci pedina da muovere "))
-y = int(input("Inserisci la mossa "))
-tup = (x, y, to_eliminate[0])
-# TODO Problema: Se sposto una pedina che non è quella del turno corrente il programma lo permette.
-phase_two_state_3 = millsGame.result(phase_two_state_2, tup)
-millsGame.display(phase_two_state_3)
+# to_eliminate = can_eliminate(millsGame, phase_two_state_2)
+# print("Pedine eliminabili da : " + phase_two_state_2.to_move)
+# print(to_eliminate)
+# print("Turno di : " + phase_two_state_2.to_move)
+# x = int(input("Inserisci pedina da muovere "))
+# y = int(input("Inserisci la mossa "))
+# tup = (x, y, to_eliminate[0])
+# # TODO Problema: Se sposto una pedina che non è quella del turno corrente il programma lo permette.
+# phase_two_state_3 = millsGame.result(phase_two_state_2, tup)
+# millsGame.display(phase_two_state_3)
 # print(can_move(millsGame, phase_one_state, 'B'))
 
 # print(millsGame.player_pieces(phase_one_state))
 # print(check_tris_on_board(millsGame, phase_one_state))
 # print(check_tris_on_board(millsGame, phase_one_state, "B"))
 
-print("empty_boxes test: ")
-print(phase_two_state_3.moves)
+# print("empty_boxes test: ")
+# print(phase_two_state_3.moves)

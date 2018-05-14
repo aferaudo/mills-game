@@ -1,4 +1,5 @@
 from .. import MillsGame
+from ..game_utils import *
 
 """This file contains the heuristics of the game
 For example:
@@ -22,24 +23,68 @@ def filter_phase1(game, state):
     :return:
     """
 
+    adjacent_weight = 1
+    couple = 2
+    tris_weight = 7
+    block_tris = 6
+    double_game = 4
+    block_double_game = 5
+    block_piece = 1
+
+    num_moves_to_return = 4
+
+    player = state.to_move
+    opponent = "B" if player == "W" else "W"
+
     moves = []
 
     if state.w_board == 0 and state.b_board == 0:
-        return [4]
+        return [tuple((4, 100))]
 
     possible_moves = state.moves
-    possible_eliminate = MillsGame.can_eliminate(game, state)
 
     for move in possible_moves:
-        moves.append(move, evaluate_single_move_phase1())
+        # inizialmente non ho vantaggi con questa mossa
+        value = 0
 
-    if state.w_board < 3 and state.b_board < 3:
-        # TODO Ancora non è possibile fare dei tris come ci comportiamo?
-        print()
-    else:
-        # TODO fare la will_tris per scegliere la casella migliore
-        print()
-    return moves
+        # qua calcoliamo quanti adiacenti liberi ha la mossa corrente
+        adjacent = adjacent_locations(move)
+        adjacent = remove_moves_occupied(state, adjacent)
+        value += len(adjacent) * adjacent_weight
+
+        # valutiamo se la mosse corrente ci porta a fare un tris
+        if check_tris(state.board, -1, move, player):
+            value += tris_weight
+
+        # valuto se blocco un futuro tris dell'avversario
+        if check_tris(state.board, -1, move, opponent):
+            value += block_tris
+
+        # valuto se facciamo un doppio gioco
+        check_couples_num = check_couples(state, move, player)
+        if check_couples_num == 2:
+            value += check_couples_num * double_game
+        else:
+            value += check_couples_num * couple
+
+        # valuto se blocchiamo un doppio gioco
+        if check_double_game(state, move, opponent):
+            value += block_double_game
+
+        # aggiungo la mossa alle mosse da restituire
+        moves.append(tuple((move, value)))
+
+    moves = sorted(moves, key=lambda x: x[1])
+    moves = moves[len(moves)-5:len(moves)]
+    moves.reverse()
+
+    # print(moves)
+
+    # for move in possible_moves:
+    #     moves.append(move, evaluate_single_move_phase1())
+
+    # TODO non abbiamo fatto un cazzo
+    return moves if len(moves) > 0 else state.moves
 
 
 def filter_phase2(game, state):
@@ -66,5 +111,5 @@ def filter_phase3(game, state):
     :return:
     """
 
-    moves = []
+    moves = state.moves
     return moves

@@ -25,7 +25,7 @@ def result(game, state, move):
     """
     # TODO quando la fase 1 sarà operativa non servirà questo doppio if (Forse)
     if game.Phase == 1:
-        if move not in state.moves:
+        if move[0] not in state.moves:
             return state  # Illegal move has no effect
     if game.Phase == 2:
         if move[1] not in state.moves:
@@ -39,10 +39,11 @@ def result(game, state, move):
         game.Phase = 2
 
     if game.Phase == 1:
+        # TODO PRIORITA' MASSIMA Eliminare pedina in caso di tris
         player = ('B' if state.to_move == 'W' else 'W')
-        board[move] = state.to_move
+        board[move[0]] = state.to_move
         moves = list(state.moves)
-        moves.remove(move)
+        moves.remove(move[0])
         new_state = GameState(to_move=player,
                               utility=compute_utility(game, state),
                               board=board,
