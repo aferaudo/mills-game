@@ -1,4 +1,5 @@
 
+from .heuristics import *
 from .. import MillsGame
 
 
@@ -11,26 +12,27 @@ def opponent_will_tris(game, state):
         # TODO da finire
 
 
-
 def actions(game, state):
+    """
+    prende in ingresso lo stato corrente (disposizione pedine sulla board) e restituisce
+    le azioni fattibili dal giocatore che sta muovendo in base alla fase di gioco corrente
+    fase 1: disposizione iniziale delle pedine sulla board
+    fase 2: movimento pedine sulla board da una posizione ad una adiacente
+    fase 3: movimento pedine sulla board da una posizione ad un'altra qualsiasi
+    :param game:
+    :param state:
+    :return:
+    """
 
     moves = state.moves
     player = state.to_move
 
     if game.Phase == 1:
-        if state.w_board == 0 and state.b_board == 0:
-            return [4]
-        elif state.w_board < 3 and state.b_board < 3:
-            # TODO Ancora non è possibile fare dei tris come ci comportiamo?
-            print()
-        else:
-            # TODO fare la will_tris per scegliere la casella migliore
-            print()
+        moves = heuristic_phase1(game, state)
 
     if game.Phase == 2:
-        # Prendo le mie pedine e direttamente metto nelle moves solo le possibili moves che sono adiacenti alle mie
-        # Il for potrebbe essere ottimizzato o quantomeno reso in line
+        moves = heuristic_phase2(game, state)
 
-        return MillsGame.can_move(game, state, player)
-
+    if game.Phase == 3:
+        moves = heuristic_phase3(game, state)
     return moves

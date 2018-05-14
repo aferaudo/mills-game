@@ -102,3 +102,6 @@ millsGame.display(phase_two_state_3)
 # print(millsGame.player_pieces(phase_one_state))
 # print(check_tris_on_board(millsGame, phase_one_state))
 # print(check_tris_on_board(millsGame, phase_one_state, "B"))
+
+print("empty_boxes test: ")
+print(phase_two_state_3.moves)

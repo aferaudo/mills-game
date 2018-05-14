@@ -1,5 +1,5 @@
 # util for printing colored string
-class bcolors:
+class BColors:
     RED = '\033[91m'
     BLUE = '\033[94m'
     GREEN = '\033[92m'
@@ -12,19 +12,19 @@ class bcolors:
     WHITE = '\033[93m'
     BLACK = '\033[91m'
 
-# take an index occupied by some player and colors it
+
 def print_colored(linea):
+    # take an index occupied by some player and colors it
     new_line = ''
     for c in linea:
         if c == 'W':
-            new_line += bcolors.WHITE + c + bcolors.END
+            new_line += BColors.WHITE + c + BColors.END
         elif c == 'B':
-            new_line += bcolors.BLACK + c + bcolors.END
+            new_line += BColors.BLACK + c + BColors.END
         else:
             new_line += c
 
     print(new_line)
-
 
 
 def display(game, state):
