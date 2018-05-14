@@ -88,7 +88,7 @@ print_current_move(millsGame, phase_two_state_2, phase_two_state_3, tup, 3)"""
 
 # Prova can_eliminate
 
-to_eliminate = can_eliminate(millsGame, phase_two_state_2, 'B' if phase_two_state_2.to_move == 'W' else 'W')
+to_eliminate = can_eliminate(millsGame, phase_two_state_2)
 print("Pedine eliminabili da : " + phase_two_state_2.to_move)
 print(to_eliminate)
 print("Turno di : " + phase_two_state_2.to_move)

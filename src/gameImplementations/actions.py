@@ -1,5 +1,5 @@
 
-from .heuristics import *
+from .filter_actions import *
 from .. import MillsGame
 
 
@@ -28,11 +28,11 @@ def actions(game, state):
     player = state.to_move
 
     if game.Phase == 1:
-        moves = heuristic_phase1(game, state)
+        moves = filter_phase1(game, state)
 
     if game.Phase == 2:
-        moves = heuristic_phase2(game, state)
+        moves = filter_phase2(game, state)
 
     if game.Phase == 3:
-        moves = heuristic_phase3(game, state)
+        moves = filter_phase3(game, state)
     return moves

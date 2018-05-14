@@ -152,7 +152,7 @@ def check_tris(board, old_pos, pos_fin, player):
     return False
 
 
-def can_eliminate(game, state, player):
+def can_eliminate(game, state):
     """
     prende in ingresso lo stato il giocatore che deve muovere
     restituisce tutte le pedine dell'aversario che si possono eliminare
@@ -161,6 +161,7 @@ def can_eliminate(game, state, player):
     :param player:
     :return:
     """
+    player = 'B' if state.to_move == 'W' else 'W'
     opponent_pieces = game.player_pieces(state, player)
     tris_done = check_tris_on_board(game, state, player)
     not_removable = []
