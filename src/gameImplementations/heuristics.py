@@ -19,7 +19,6 @@ def heuristic_phase1(game, state):
     """
     moves = []
 
-
     if state.w_board == 0 and state.b_board == 0:
         return [4]
     elif state.w_board < 3 and state.b_board < 3:

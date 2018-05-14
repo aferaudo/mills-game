@@ -62,17 +62,17 @@ def result(game, state, move):
         # devo eliminare una pedina dell'avversario
         new_w_board = state.w_board
         new_b_board = state.b_board
-        if move[2] != -1:
-            board[move[2]] = 'O'
-            if state.to_move == 'B':
-                new_w_board = state.w_board - 1
-            else:
-                new_b_board = state.b_board - 1
-
         board[move[0]] = 'O'
         board[move[1]] = state.to_move
         moves = list(state.moves)
         moves[moves.index(move[1])] = move[0]
+        if move[2] != -1:
+            board[move[2]] = 'O'
+            moves.append(move[2])
+            if state.to_move == 'B':
+                new_w_board = state.w_board - 1
+            else:
+                new_b_board = state.b_board - 1
         new_state = GameState(to_move=player,
                               utility=compute_utility(game, state),
                               board=board,

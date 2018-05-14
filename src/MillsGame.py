@@ -135,6 +135,7 @@ def check_tris(board, old_pos, pos_fin, player):
     """
     Controlla se con la mossa da effettuare si realizza un tris
     :param board:
+    :param old_pos:
     :param pos_fin:
     :param player:
     :return: boolean
