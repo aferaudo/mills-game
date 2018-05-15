@@ -237,9 +237,9 @@ def check_couples(state, move, player=None):
     return tris_presence
 
 
-def block_piece(state, move, player=None):
+def block_pieces(state, move, player=None):
     """
-    questa funzione prende in ingresso una posizione e un giocatore
+    questa funzione prende in ingresso una posizione e un giocatore se specificato
     ritorna il numero di pedine avversarie che con questa mossa non possono più muoversi
     :param state:
     :param player:
@@ -247,22 +247,28 @@ def block_piece(state, move, player=None):
     """
 
     player = player if player is not None else state.to_move
-
     opponent = "B" if player == "W" else "W"
 
-    num_blocked = 0
+    blocked_pieces = 0
 
+    # print("devo valutare il posizionamento in posizione " + str(move))
+    # print("sta giocando il giocatore " + player)
+    # print("le adiacenti della mossa sono: " + str(locations()[move]))
     for adjacent in locations()[move]:
-        if adjacent == opponent:
-            adjacent_to_check = locations()[adjacent_opponent]
-            check = len(adjacent_to_check) - 1
-            for adjacent_opponent in adjacent_to_check:
-                if adjacent_opponent != move and adjacent_opponent != 'O':
+        if state.board[adjacent] == opponent:
+            # print("pedina avversaria adiacente da controllare: " + str(adjacent))
+            opponent_adjacentsss = locations()[adjacent]
+            # print("le sue adiacenti sono: " + str(opponent_adjacentsss))
+            check = len(opponent_adjacentsss)-1
+            # print("check prima dei controlli vale: " + str(check))
+            for opponent_adjacent in opponent_adjacentsss:
+                if opponent_adjacent != move and state.board[opponent_adjacent] != 'O':
                     check -= 1
+            # print("check alla fine dei controlli vale: " + str(check))
             if check == 0:
-                num_blocked += 1
+                blocked_pieces += 1
 
-    return num_blocked
+    return blocked_pieces
 
 
 def check_phase(w_no_board, b_no_board, w_board, b_board):

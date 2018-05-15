@@ -11,10 +11,6 @@ This function (eval_fun) return a value that can be used by alpha beta algotithm
 """
 
 
-def evaluate_single_move_phase1(game, state, move):
-    print()
-
-
 def filter_phase1(game, state):
     """
     questa funzione prende in ingresso lo stato e restutuisce le mosse migliori per la fase 1
@@ -30,7 +26,8 @@ def filter_phase1(game, state):
     block_tris = 6
     double_game = 4
     block_double_game = 5
-    block_piece = 1
+    block_piece_weight = 1.5
+    mine_block_piece_weight = -1
 
     num_moves_to_return = 5
 
@@ -71,6 +68,14 @@ def filter_phase1(game, state):
         # valuto se blocchiamo un doppio gioco
         if check_double_game(state, move, opponent):
             value += block_double_game
+
+        # valuto se blocco delle pedine avversarie
+        pieces_blocked = block_pieces(state, move, player)
+        value += pieces_blocked * block_piece_weight
+
+        # valuto se blocco delle mie pedine (in questo caso la mossa sarà penalizzata
+        mine_pieces_blocked = block_pieces(state, move, opponent)
+        value += mine_pieces_blocked * mine_block_piece_weight
 
         # aggiungo la mossa alle mosse da restituire
         moves.append(tuple((move, value)))

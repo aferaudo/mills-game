@@ -104,6 +104,13 @@ phase_one_state = test_phase_one(millsGame)
 print("Le nostre actions per il giocatore " + phase_one_state.to_move)
 print(millsGame.actions(phase_one_state))
 
+# print("test funzione calcola pedine bloccate")
+# x = int(input("Inserisci mossa: "))
+# count_temp = block_pieces(phase_one_state, x)
+# print("posizionando la pedina in questa posizione blocco " + str(count_temp) + " pedine avversarie")
+# count_temp1 = block_pieces(phase_one_state, x, "B" if phase_one_state.to_move == "W" else "W")
+# print("posizionando la pedina in questa posizione blocco " + str(count_temp1) + " pedine mie")
+
 # print("********* PHASE 2 *********")
 # print("Test game.actions() for player " + phase_one_state.to_move + ": ")
 #
