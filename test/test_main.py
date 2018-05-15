@@ -1,6 +1,7 @@
 
 from src.MillsGame import MillsGame, can_eliminate
 from core.algorithm.aima_alg import *
+from src.game_utils import *
 
 import random
 
@@ -32,22 +33,6 @@ def print_current_move(game, old_state, new_state, move, iteration=''):
     print(new_state, end='\n\n')
 
 
-def check_phase(game, state):
-    """
-    Metodo che aggiorna la phase.
-    Da chiamare ogni volta che l'algoritmo mi da una nuova mossa e abbiamo usato la result
-    :param game:
-    :param state:
-    :return:
-    """
-    # TODO va messa in game_utils
-    print("Sono nella check phase")
-    print("w_no_board = " + str(state.w_no_board))
-    print("b_no_board = " + str(state.b_no_board))
-    if state.w_no_board == 0 and state.b_no_board == 0:
-        game.Phase = 2
-        game.TempPhase = 2
-
 
 def test_phase_one(game, use_random=False):
     print("********* PHASE 1 *********")
@@ -76,8 +61,6 @@ def test_phase_one(game, use_random=False):
                 next_move = tuple((next_move, 0))
             old_state = current_state
             current_state = game.result(old_state, next_move)
-            # aggiorno la fase (eventualmente serve)
-            check_phase(game, current_state)
             print_current_move(game, old_state, current_state, next_move, iteration)
             iteration += 1
 
@@ -92,25 +75,23 @@ def test_phase_one(game, use_random=False):
         print(game.initial, end='\n\n')
 
         iteration = 1
-        while game.Phase == 1:
+        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 1:
             if current_state.to_move == 'W':
                 next_move = alphabeta_cutoff_search(current_state, game, depth, cutt_off, eval_fn)
-                extracted.append(next_move[0])
+                extracted.append(next_move[1])
             else:
                 next_move = get_random(extracted)
                 extracted.append(next_move)
-                next_move = tuple((next_move, 0))
+                next_move = tuple((-1, next_move, -1))
             old_state = current_state
-            print("Prima di aggiornare lo state")
-            print(old_state)
+            # print("Prima di aggiornare lo state")
+            # print(old_state)
             current_state = game.result(old_state, next_move)
-            print("Dopo aver aggiornato lo state")
-            print(current_state)
-            # aggiorno la fase (eventualmente serve)
-            check_phase(game, current_state)
+            # print("Dopo aver aggiornato lo state")
+            # print(current_state)
             print_current_move(game, old_state, current_state, next_move, iteration)
             iteration += 1
-            print("Phase = " + str(game.Phase))
+            # print("Phase = " + str(game.Phase))
 
         return current_state
 

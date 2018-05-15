@@ -263,3 +263,16 @@ def block_piece(state, move, player=None):
                 num_blocked += 1
 
     return num_blocked
+
+
+def check_phase(w_no_board, b_no_board, w_board, b_board):
+    """
+    Controllo in base allo stato in quale fase siamo e restituisce il numero della fase
+    :param state:
+    :return:
+    """
+    if w_no_board == 0 and b_no_board == 0:
+        return 2
+    else:
+        return 1
+    # TODO check per la fase 3

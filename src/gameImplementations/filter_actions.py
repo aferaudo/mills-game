@@ -39,7 +39,7 @@ def filter_phase1(game, state):
     moves = []
 
     if state.w_board == 0 and state.b_board == 0:
-        return [tuple((4, 100))]
+        return [tuple((-1, 4, -1))]
 
     possible_moves = state.moves
 
@@ -78,7 +78,12 @@ def filter_phase1(game, state):
     moves = moves[len(moves)-num_moves_to_return:len(moves)]
     moves.reverse()
 
-    return moves if len(moves) > 0 else state.moves
+    moves_to_return = []
+    for move in moves:
+        has_to_delete = check_tris(state.board, -1, move, player)
+        moves_to_return.append(tuple((-1, move[0], 1 if has_to_delete else 0)))
+
+    return moves_to_return if len(moves_to_return) > 0 else state.moves
 
 
 def filter_phase2(game, state):

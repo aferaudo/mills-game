@@ -51,13 +51,17 @@ class MillsGame(Game):
         moves = state.moves
         player = state.to_move
 
-        if self.TempPhase == 1:
+        phase = check_phase(state.w_no_board, state.b_no_board, state.w_board, state.b_board)
+
+        # print("Phase in actions: " + str(self.Phase))
+
+        if phase == 1:
             moves = filter_phase1(self, state)
 
-        if self.TempPhase == 2:
+        if phase == 2:
             moves = filter_phase2(self, state)
 
-        if self.TempPhase == 3:
+        if phase == 3:
             moves = filter_phase3(self, state)
         return moves
 
