@@ -2,7 +2,9 @@
 from src.MillsGame import MillsGame, can_eliminate
 from core.algorithm.aima_alg import *
 from src.game_utils import *
+from src.gameImplementations.delete_strategy import delete_pieces_phase1
 
+import time
 import random
 
 depth = 5
@@ -19,7 +21,7 @@ def get_random(extracted):
     index_not_found = True
     index = None
     while index_not_found:
-        index = random.randint(0, 24)
+        index = random.randint(0, 23)
         if index not in extracted:
             index_not_found = False
 
@@ -37,36 +39,6 @@ def print_current_move(game, old_state, new_state, move, iteration=''):
 def test_phase_one(game, use_random=False):
     print("********* PHASE 1 *********")
     if use_random:
-        current_state = game.initial
-        extracted = []
-        print(" --- Empty Board --- \n")
-        game.display(current_state)
-        print(game.initial, end='\n\n')
-
-        first_move = game.actions(current_state)[0]
-        extracted.append(first_move)
-        current_state = game.result(current_state, tuple((first_move, 0)))
-
-        print_current_move(game, game.initial, current_state, first_move, 1)
-
-        iteration = 2
-        while game.Phase == 1:
-            if current_state.to_move == 'W':
-                possible_moves = game.actions(current_state)
-                next_move = possible_moves[0]
-                extracted.append(next_move[0])
-            else:
-                next_move = get_random(extracted)
-                extracted.append(next_move)
-                next_move = tuple((next_move, 0))
-            old_state = current_state
-            current_state = game.result(old_state, next_move)
-            print_current_move(game, old_state, current_state, next_move, iteration)
-            iteration += 1
-
-        return current_state
-
-    else:
         # player W gioca usando Alpha Beta, B gioca a caso
         current_state = game.initial
         extracted = []
@@ -75,12 +47,19 @@ def test_phase_one(game, use_random=False):
         print(game.initial, end='\n\n')
 
         iteration = 1
-        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 1:
+        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                          current_state.b_board) == 1:
+            end_time = 0.0
             if current_state.to_move == 'W':
+                start_time = time.time()
                 next_move = alphabeta_cutoff_search(current_state, game, depth, cutt_off, eval_fn)
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
                 extracted.append(next_move[1])
             else:
+                start_time = time.time()
                 next_move = get_random(extracted)
+                end_time = time.time()
                 extracted.append(next_move)
                 next_move = tuple((-1, next_move, -1))
             old_state = current_state
@@ -93,16 +72,52 @@ def test_phase_one(game, use_random=False):
             iteration += 1
             # print("Phase = " + str(game.Phase))
 
-        return current_state
+    else:
+        # player W gioca usando Alpha Beta, B gioca a caso
+        current_state = game.initial
+        extracted = []
+        print(" --- Empty Board --- \n")
+        game.display(current_state)
+        print(game.initial, end='\n\n')
+
+        iteration = 1
+        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 1:
+            end_time = 0.0
+            start_time = time.time()
+            next_move = alphabeta_cutoff_search(current_state, game, depth, cutt_off, eval_fn)
+            end_time = time.time() - start_time
+            print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+            old_state = current_state
+            current_state = game.result(old_state, next_move)
+            print_current_move(game, old_state, current_state, next_move, iteration)
+            iteration += 1
+
+    return current_state
 
 # BODY TEST
 
 
 millsGame = MillsGame()
-phase_one_state = test_phase_one(millsGame)
+phase_one_state = test_phase_one(millsGame, True)
 
 print("Le nostre actions per il giocatore " + phase_one_state.to_move)
 print(millsGame.actions(phase_one_state))
+
+# move = int(input("Inserisci mossa: "))
+# x = int(input("Inserisci tris1: "))
+# y = int(input("Inserisci tris1: "))
+# z = int(input("Inserisci tris1: "))
+# tupla = tuple((x, y, z))
+#
+# its_adjacents = tupla
+# check = 0
+# if move in its_adjacents:
+#     check = len(its_adjacents)
+#     for pos in its_adjacents:
+#         if phase_one_state.board[pos] != 'O':
+#             check -= 1
+# print("Per move: " + str(move) + " check vale: " + str(check))
+
 
 # print("test funzione calcola pedine bloccate")
 # x = int(input("Inserisci mossa: "))
