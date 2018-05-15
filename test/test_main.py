@@ -111,6 +111,14 @@ print(millsGame.actions(phase_one_state))
 # count_temp1 = block_pieces(phase_one_state, x, "B" if phase_one_state.to_move == "W" else "W")
 # print("posizionando la pedina in questa posizione blocco " + str(count_temp1) + " pedine mie")
 
+# print("test funzione tris")
+# x = int(input("Inserisci tris1: "))
+# y = int(input("Inserisci tris1: "))
+# z = int(input("Inserisci tris1: "))
+# tupla = tuple((x, y, z))
+# temp3 = tris_adjacents(tupla)
+# print("le adiacenti del tris " + str(tupla) + " sono: " + str(temp3))
+
 # print("********* PHASE 2 *********")
 # print("Test game.actions() for player " + phase_one_state.to_move + ": ")
 #

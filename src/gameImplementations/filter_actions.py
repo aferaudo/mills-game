@@ -74,7 +74,7 @@ def filter_phase1(game, state):
         pieces_blocked = block_pieces(state, move, player)
         value += pieces_blocked * block_piece_weight
 
-        # valuto se blocco delle mie pedine (in questo caso la mossa sarà penalizzata
+        # valuto se blocco delle mie pedine (in questo caso la mossa sarà PENALIZZATA)
         mine_pieces_blocked = block_pieces(state, move, opponent)
         value += mine_pieces_blocked * mine_block_piece_weight
 

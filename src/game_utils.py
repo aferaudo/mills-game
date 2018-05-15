@@ -287,6 +287,27 @@ def block_pieces(state, move, player=None):
     return blocked_pieces
 
 
+def tris_adjacents(tris):
+    """
+    questa funzione prende in ingresso un tris e restituisce una lista contenente tutte le adiacenti
+    di quel tris
+    :param tris:
+    :return:
+    """
+    adjacents = []
+
+    # inserisco tutte le adiacenti di ogni elemento del tris
+    for x in tris:
+        for y in locations()[x]:
+            adjacents.append(y)
+
+    # elimino dalle adiacenti quelle che fanno parte del tris
+    for x in tris:
+        adjacents = list(filter(lambda a: a != x, adjacents))
+
+    return adjacents
+
+
 def check_phase(w_no_board, b_no_board, w_board, b_board):
     """
     Controllo in base allo stato in quale fase siamo e restituisce il numero della fase

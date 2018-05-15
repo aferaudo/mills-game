@@ -16,7 +16,7 @@ def delete_pieces_phase1(state):
     tris_weight = 7
     double_game_opponent = 4
     double_game_player = 3
-    blocking_weight = 1
+    blocking_tris_weight = 5
 
     num_deletable_to_remove = 1
 
@@ -51,14 +51,18 @@ def delete_pieces_phase1(state):
         if check_double_occupied == 2:
             value += check_double_occupied * double_game_player
 
+        # TODO provare se questa vualutazione funziona
         # valuto se questa pedina blocca un mio tris
-        # total_blocking = 0
-        # player_tris = check_tris_on_board(state, player)
-        # for tris in player_tris:
-        #     for piece in tris:
-        #         if piece in locations()[move]: # TODO cambia come blocco non basta che sia adiacente
-        #             total_blocking += blocking_weight
-        # value += total_blocking
+        mine_tris = check_tris_on_board(state)
+        for tris in mine_tris:
+            its_adjacents = tris_adjacents(tris)
+            if move in its_adjacents:
+                check = len(its_adjacents)
+                for x in its_adjacents:
+                    if state.board[x] != 'O':
+                        check -= 1
+                if check == 0:
+                    value += blocking_tris_weight
 
         deletable.append(tuple((move, value)))
 
