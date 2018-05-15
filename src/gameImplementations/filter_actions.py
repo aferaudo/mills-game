@@ -1,5 +1,6 @@
 from .. import MillsGame
 from ..game_utils import *
+from .delete_strategy import *
 
 """This file contains the heuristics of the game
 For example:
@@ -80,8 +81,13 @@ def filter_phase1(game, state):
 
     moves_to_return = []
     for move in moves:
-        has_to_delete = check_tris(state.board, -1, move, player)
-        moves_to_return.append(tuple((-1, move[0], 1 if has_to_delete else 0)))
+        has_to_delete = check_tris(state.board, -1, move[0], player)
+        # print(has_to_delete)
+        if has_to_delete:
+            to_delete = delete_pieces_phase1(state)
+            # print(has_to_delete, to_delete)
+
+        moves_to_return.append(tuple((-1, move[0], to_delete[0] if has_to_delete else -1)))
 
     return moves_to_return if len(moves_to_return) > 0 else state.moves
 

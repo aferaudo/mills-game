@@ -1,6 +1,7 @@
 
 from collections import namedtuple
 from ..game_utils import check_phase, can_move
+from .delete_strategy import *
 from .. import MillsGame
 """
 Game State
@@ -31,7 +32,8 @@ def result(game, state, move):
     moves = list(state.moves)
     next_player = ('B' if state.to_move == 'W' else 'W')
     board[move[1]] = state.to_move
-    # print("siamo in result: " + str(move))
+
+    # aggiorno la board eseguendo il movimento/schieramento presente in move
     if move[0] == -1:
         moves.remove(move[1])
         new_w_board = state.w_board + 1 if state.to_move == 'W' else state.w_board
@@ -45,6 +47,15 @@ def result(game, state, move):
         new_b_board = state.b_board
         w_no_board = 0
         b_no_board = 0
+
+    # controllo se devo eliminare la pedina avversaria
+    if move[2] != -1:
+        board[move[2]] = 'O'
+        moves.append(move[2])
+        if state.to_move == 'B':
+            new_w_board = state.w_board - 1
+        else:
+            new_b_board = state.b_board - 1
 
     return GameState(to_move=next_player,
                      utility=compute_utility(state, w_no_board, b_no_board, new_w_board, new_b_board),

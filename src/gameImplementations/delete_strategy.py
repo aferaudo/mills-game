@@ -24,7 +24,7 @@ def delete_pieces_phase1(state):
     opponent = "B" if player == "W" else "W"
 
     deletable = []
-    deletable_pieces = can_eliminate(state, opponent)
+    deletable_pieces = can_eliminate(state)
 
     for move in deletable_pieces:
         # inizialmente non ho vantaggi con questa mossa
@@ -52,18 +52,16 @@ def delete_pieces_phase1(state):
             value += check_double_occupied * double_game_player
 
         # valuto se questa pedina blocca un mio tris
-        total_blocking = 0
-        player_tris = check_tris_on_board(state, player)
-        for tris in player_tris:
-            for piece in tris:
-                if piece in locations()[move]: # TODO cambia come blocco non basta che sia adiacente
-                    total_blocking += blocking_weight
-        value += total_blocking
+        # total_blocking = 0
+        # player_tris = check_tris_on_board(state, player)
+        # for tris in player_tris:
+        #     for piece in tris:
+        #         if piece in locations()[move]: # TODO cambia come blocco non basta che sia adiacente
+        #             total_blocking += blocking_weight
+        # value += total_blocking
 
         deletable.append(tuple((move, value)))
 
     deletable = sorted(deletable, key=lambda x: x[1])
-    deletable = deletable[len(deletable) - num_deletable_to_remove:len(deletable)]
-    deletable.reverse()
 
-    return deletable if len(deletable) > 0 else state.moves
+    return deletable[len(deletable)-1] if len(deletable) > 0 else state.moves
