@@ -31,7 +31,7 @@ def filter_phase1(game, state):
     block_double_game = 5
     block_piece = 1
 
-    num_moves_to_return = 4
+    num_moves_to_return = 5
 
     player = state.to_move
     opponent = "B" if player == "W" else "W"
@@ -60,7 +60,7 @@ def filter_phase1(game, state):
         if check_tris(state.board, -1, move, opponent):
             value += block_tris
 
-        # valuto se facciamo un doppio gioco
+        # valuto se facciamo un doppio gioco o coppia
         check_couples_num = check_couples(state, move, player)
         if check_couples_num == 2:
             value += check_couples_num * double_game
@@ -75,15 +75,9 @@ def filter_phase1(game, state):
         moves.append(tuple((move, value)))
 
     moves = sorted(moves, key=lambda x: x[1])
-    moves = moves[len(moves)-5:len(moves)]
+    moves = moves[len(moves)-num_moves_to_return:len(moves)]
     moves.reverse()
 
-    # print(moves)
-
-    # for move in possible_moves:
-    #     moves.append(move, evaluate_single_move_phase1())
-
-    # TODO non abbiamo fatto un cazzo
     return moves if len(moves) > 0 else state.moves
 
 
@@ -98,7 +92,7 @@ def filter_phase2(game, state):
 
     # TODO Sommare euristica eliminazione pedina
     moves = []
-    moves = MillsGame.can_move(game, state)
+    moves = MillsGame.can_move(state)
     return moves
 
 

@@ -1,21 +1,4 @@
 
-
-def player_pieces(state, player=None):
-    """
-    Restituisce le pedine del giocatore, se :param player non è passato restituisce le pedine del giocatore
-    dello stato corrente, altrimenti del giocatore passato tramite il parametro
-    :param state:
-    :param player:
-    :return:
-    """
-    player = player if player is not None else state.to_move
-    pieces = []
-    for index, value in enumerate(state.board):
-        if value == player:
-            pieces.append(index)
-    return pieces
-
-
 def locations():
     """
     restituisce una lista contenente tutte le posizioni adiacenti alle diverse posizioni possibili sulla board
@@ -72,6 +55,22 @@ def all_tris():
         [12, 13, 14],
         [16, 19, 22]
     ]
+
+
+def player_pieces(state, player=None):
+    """
+    Restituisce le pedine del giocatore, se :param player non è passato restituisce le pedine del giocatore
+    dello stato corrente, altrimenti del giocatore passato tramite il parametro
+    :param state:
+    :param player:
+    :return:
+    """
+    player = player if player is not None else state.to_move
+    pieces = []
+    for index, value in enumerate(state.board):
+        if value == player:
+            pieces.append(index)
+    return pieces
 
 
 def adjacent_locations(position):
@@ -148,7 +147,7 @@ def check_tris(board, old_pos, pos_fin, player):
     return False
 
 
-def can_eliminate(game, state):
+def can_eliminate(state):
     """
     prende in ingresso lo stato il giocatore che deve muovere
     restituisce tutte le pedine dell'aversario che si possono eliminare
@@ -170,7 +169,7 @@ def can_eliminate(game, state):
     return removable
 
 
-def can_move(game, state, player=None):
+def can_move(state, player=None):
     """
     restituisce una lista di tuple come (posizione corrente, mossa possibile, pedine dell'avversario che posso eliminare)
     :param game:
@@ -181,7 +180,7 @@ def can_move(game, state, player=None):
     player = player if player is not None else state.to_move
 
     moves = []
-    removable = can_eliminate(game, state)
+    removable = can_eliminate(state)
     for index, value in enumerate(state.board):
         if value == player:
             for pos in adjacent_locations(index):
@@ -236,3 +235,31 @@ def check_couples(state, move, player=None):
                 tris_presence += 1
 
     return tris_presence
+
+
+def block_piece(state, move, player=None):
+    """
+    questa funzione prende in ingresso una posizione e un giocatore
+    ritorna il numero di pedine avversarie che con questa mossa non possono più muoversi
+    :param state:
+    :param player:
+    :return:
+    """
+
+    player = player if player is not None else state.to_move
+
+    opponent = "B" if player == "W" else "W"
+
+    num_blocked = 0
+
+    for adjacent in locations()[move]:
+        if adjacent == opponent:
+            adjacent_to_check = locations()[adjacent_opponent]
+            check = len(adjacent_to_check) - 1
+            for adjacent_opponent in adjacent_to_check:
+                if adjacent_opponent != move and adjacent_opponent != 'O':
+                    check -= 1
+            if check == 0:
+                num_blocked += 1
+
+    return num_blocked
