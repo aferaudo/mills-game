@@ -20,6 +20,7 @@ def filter_phase1(game, state):
     :return:
     """
 
+    # TODO Controllare pesi (da fare alla fine)
     adjacent_weight = 1
     couple = 2
     tris_weight = 7

@@ -210,6 +210,14 @@ def remove_moves_occupied(state, moves):
 
 
 def check_double_game(state, move, player=None):
+    """
+    questa funzione prende in ingresso lo stato e una possibile mossa
+    restituisce vero se con questa mossa si forma un doppio gioco
+    :param state:
+    :param move:
+    :param player:
+    :return:
+    """
     player = player if player is not None else state.to_move
 
     if check_couples(state, move, player) == 2:
@@ -219,6 +227,14 @@ def check_double_game(state, move, player=None):
 
 
 def check_couples(state, move, player=None):
+    """
+    questa funzione prende in ingresso lo stato e una possibile mossa
+    restituisce il numero di coppie che si formerebbero
+    :param state:
+    :param move:
+    :param player:
+    :return:
+    """
     player = player if player is not None else state.to_move
 
     tris_presence = 0
