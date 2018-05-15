@@ -1,7 +1,12 @@
 
 from src.MillsGame import MillsGame, can_eliminate
+from core.algorithm.aima_alg import *
 
 import random
+
+depth = 5
+cutt_off = None
+eval_fn = None
 
 
 def get_random(extracted):
@@ -27,6 +32,23 @@ def print_current_move(game, old_state, new_state, move, iteration=''):
     print(new_state, end='\n\n')
 
 
+def check_phase(game, state):
+    """
+    Metodo che aggiorna la phase.
+    Da chiamare ogni volta che l'algoritmo mi da una nuova mossa e abbiamo usato la result
+    :param game:
+    :param state:
+    :return:
+    """
+    # TODO va messa in game_utils
+    print("Sono nella check phase")
+    print("w_no_board = " + str(state.w_no_board))
+    print("b_no_board = " + str(state.b_no_board))
+    if state.w_no_board == 0 and state.b_no_board == 0:
+        game.Phase = 2
+        game.TempPhase = 2
+
+
 def test_phase_one(game, use_random=False):
     print("********* PHASE 1 *********")
     if use_random:
@@ -47,14 +69,48 @@ def test_phase_one(game, use_random=False):
             if current_state.to_move == 'W':
                 possible_moves = game.actions(current_state)
                 next_move = possible_moves[0]
+                extracted.append(next_move[0])
             else:
                 next_move = get_random(extracted)
                 extracted.append(next_move)
                 next_move = tuple((next_move, 0))
             old_state = current_state
             current_state = game.result(old_state, next_move)
+            # aggiorno la fase (eventualmente serve)
+            check_phase(game, current_state)
             print_current_move(game, old_state, current_state, next_move, iteration)
             iteration += 1
+
+        return current_state
+
+    else:
+        # player W gioca usando Alpha Beta, B gioca a caso
+        current_state = game.initial
+        extracted = []
+        print(" --- Empty Board --- \n")
+        game.display(current_state)
+        print(game.initial, end='\n\n')
+
+        iteration = 1
+        while game.Phase == 1:
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cutt_off, eval_fn)
+                extracted.append(next_move[0])
+            else:
+                next_move = get_random(extracted)
+                extracted.append(next_move)
+                next_move = tuple((next_move, 0))
+            old_state = current_state
+            print("Prima di aggiornare lo state")
+            print(old_state)
+            current_state = game.result(old_state, next_move)
+            print("Dopo aver aggiornato lo state")
+            print(current_state)
+            # aggiorno la fase (eventualmente serve)
+            check_phase(game, current_state)
+            print_current_move(game, old_state, current_state, next_move, iteration)
+            iteration += 1
+            print("Phase = " + str(game.Phase))
 
         return current_state
 
@@ -62,7 +118,7 @@ def test_phase_one(game, use_random=False):
 
 
 millsGame = MillsGame()
-phase_one_state = test_phase_one(millsGame, True)
+phase_one_state = test_phase_one(millsGame)
 
 print("Le nostre actions per il giocatore " + phase_one_state.to_move)
 print(millsGame.actions(phase_one_state))

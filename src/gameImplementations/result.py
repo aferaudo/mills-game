@@ -24,10 +24,10 @@ def result(game, state, move):
     :return: new_state
     """
     # TODO quando la fase 1 sarà operativa non servirà questo doppio if (Forse)
-    if game.Phase == 1:
+    if game.TempPhase == 1:
         if move[0] not in state.moves:
             return state  # Illegal move has no effect
-    if game.Phase == 2:
+    if game.TempPhase == 2:
         if move[1] not in state.moves:
             return state  # Illegal move has no effect
 
@@ -36,9 +36,9 @@ def result(game, state, move):
 
     # Check phase
     if state.w_no_board == 0 and state.b_no_board == 0:
-        game.Phase = 2
+        game.TempPhase = 2
 
-    if game.Phase == 1:
+    if game.TempPhase == 1:
         # TODO PRIORITA' MASSIMA Eliminare pedina in caso di tris
         player = ('B' if state.to_move == 'W' else 'W')
         board[move[0]] = state.to_move
@@ -53,7 +53,7 @@ def result(game, state, move):
                               w_no_board=(state.w_no_board - 1 if state.to_move == 'W' else state.w_no_board),
                               b_no_board=(state.b_no_board - 1 if state.to_move == 'B' else state.b_no_board)
                               )
-    elif game.Phase == 2:
+    elif game.TempPhase == 2:
         # move [0] = pedina da muovere
         # move [1] = posizionamento finale
         # print(move)
@@ -67,13 +67,13 @@ def result(game, state, move):
         board[move[1]] = state.to_move
         moves = list(state.moves)
         moves[moves.index(move[1])] = move[0]
-        if move[2] != -1:
-            board[move[2]] = 'O'
-            moves.append(move[2])
-            if state.to_move == 'B':
-                new_w_board = state.w_board - 1
-            else:
-                new_b_board = state.b_board - 1
+        # if move[2] != -1:
+        #     board[move[2]] = 'O'
+        #     moves.append(move[2])
+        #     if state.to_move == 'B':
+        #         new_w_board = state.w_board - 1
+        #     else:
+        #         new_b_board = state.b_board - 1
         new_state = GameState(to_move=player,
                               utility=compute_utility(game, state),
                               board=board,
@@ -90,7 +90,7 @@ def result(game, state, move):
     # TODO una volta implementata la result per la fase 2 non serve l'if su new_state not None
     if new_state is not None:
         if new_state.w_no_board == 0 and new_state.b_no_board == 0:
-            game.Phase = 2
+            game.TempPhase = 2
 
     return new_state
 
@@ -99,7 +99,7 @@ def compute_utility(game, state):
     """If 'W' wins with this move, return 1; if 'B' wins return -1; else return 0.
     É provvisoria solo per la fase 1
     """
-    if game.Phase == 1:
+    if game.TempPhase == 1:
         if state.w_no_board == 0 and state.b_no_board == 0:
             return 1 if state.to_move == 'W' else -1
         else:

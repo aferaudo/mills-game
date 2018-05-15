@@ -1,6 +1,5 @@
 from core.Game import Game
 from collections import namedtuple
-from .gameImplementations.actions import actions
 from .gameImplementations.display import display
 from .gameImplementations.result import result
 from .gameImplementations.terminal_test import terminal_test
@@ -31,6 +30,7 @@ class MillsGame(Game):
         # global Phase
         # Phase = 1
         self.Phase = 1
+        self.TempPhase = 1
         self.size = size
         self.piece = piece
         moves = [x for x in range(0, self.size)]
@@ -38,16 +38,26 @@ class MillsGame(Game):
         self.initial = GameState(to_move='W', utility=0, board=board, moves=moves, w_board=0, b_board=0, w_no_board=self.piece, b_no_board=self.piece)
 
     def actions(self, state):
+        """
+            prende in ingresso lo stato corrente (disposizione pedine sulla board) e restituisce
+            le azioni fattibili dal giocatore che sta muovendo in base alla fase di gioco corrente
+            fase 1: disposizione iniziale delle pedine sulla board
+            fase 2: movimento pedine sulla board da una posizione ad una adiacente
+            fase 3: movimento pedine sulla board da una posizione ad un'altra qualsiasi
+            :param self:
+            :param state:
+            :return:
+            """
         moves = state.moves
         player = state.to_move
 
-        if self.Phase == 1:
+        if self.TempPhase == 1:
             moves = filter_phase1(self, state)
 
-        if self.Phase == 2:
+        if self.TempPhase == 2:
             moves = filter_phase2(self, state)
 
-        if self.Phase == 3:
+        if self.TempPhase == 3:
             moves = filter_phase3(self, state)
         return moves
 
