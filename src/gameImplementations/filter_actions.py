@@ -111,40 +111,77 @@ def filter_phase2(game, state):
     moves = []
 
     # TODO Controllare pesi (da fare alla fine)
-    opponent_will_tris = -5
+    player_will_tris = 10
+    player_tris_trick = 7
+    player_couple = 2
+    player_double_game = 5
+    opponent_will_tris = -7
+    opponent_tris_will_unlock = -5
+
 
     num_moves_to_return = 5
 
     player = state.to_move
     opponent = "B" if player == "W" else "W"
 
-    possible_moves = MillsGame.can_move(state)
+    possible_moves = can_move(state, player)
 
     all_board_tris = all_tris_on_board(state)
-    player_tris = all_board_tris['W']
-    opponent_tris = all_board_tris['B']
+    player_tris = all_board_tris[player]
+    opponent_tris = all_board_tris[opponent]
 
     for move in possible_moves:
+        # TODO probabilmente dovremo controllare anche altri aspetti
         # inizialmente non ho vantaggi con questa mossa
         value = 0
 
         # valutare se facendo questa mossa consento all'avversario di fare un tris (punteggio negativo)
-        if check_tris(state.board, move[0], move[1], opponent):
-            value += opponent_will_tris
+        # è caso molto raro non so se serve farlo
+        # per farlo dobbiamo vedere se move[0] sta nella can_move dell'opponent e poi vedere se
+        # check_tris(state.board, -1, move[0], opponent) restituisce True, in quel caso non mi devo muovere
+
+        # valuto se muovendomi faccio un tris
+        if check_tris(state.board, move[0], move[1], player):
+            value += player_will_tris
 
         # valutare se facendo questa mossa libero una tris bloccato avversario (punteggio negativo)
-        if len(opponent_tris) > 0:
-            print()
+        if unlock_opponent_tris(opponent_tris, move[0]):
+            value += opponent_tris_will_unlock
 
-        # valutare se muovendomi creo una coppia
+        # valutare se muovendomi creo una coppia o un doppio gioco
+        # TODO valutare se può essere intelligente considerare come coppia favorevole se la terza pedina della coppia è occupata dall'avversario
+        # TODO non funziona bene questo check
+        check_couples_num = check_couples_phase_two(state, move[0], move[1], player)
+        if check_couples_num == 2:
+            value += check_couples_num * player_double_game  # gli do un valore basso il doppio gioco è importante nella fase 1, meno nella 2
+        else:
+            value += check_couples_num * player_couple
 
         # se ho fatto un tris e posso fare il trick di fare tris ogni due mosse
+        if move_in_player_tris(player_tris, move[0]):
+            value += player_tris_trick
+
+        # aggiungo la mossa alla lista
+        moves.append(tuple((move[0], move[1], value)))
 
     # alla fine ordinare le mosse sencondo il value in maniere decrescente e poi se il numero di mosse è sotto una
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
-    moves = possible_moves
 
-    return moves
+    moves = sorted(moves, key=lambda x: (-x[2], x[1], x[0]))
+    print("moves after order = " + str(moves))
+    if len(moves) > num_moves_to_return:
+        moves = moves[0:num_moves_to_return]
+
+    moves_to_return = []
+    for move in moves:
+        has_to_delete = check_tris(state.board, move[0], move[1], player)
+        if has_to_delete:
+            to_delete = delete_pieces_phase2(state)
+            print("To delete = " + str(to_delete))
+
+        moves_to_return.append(tuple((move[0], move[1], to_delete[0] if has_to_delete else -1)))
+
+    return moves_to_return if len(moves_to_return) > 0 else possible_moves
 
 
 def filter_phase3(game, state):

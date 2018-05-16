@@ -186,11 +186,13 @@ def can_move(state, player=None):
         if value == player:
             for pos in adjacent_locations(index):
                 if state.board[pos] == 'O':
-                    if check_tris(state.board, index, pos, player):
-                        for r in removable:
-                            moves.append(tuple((index, pos, r)))
-                    else:
-                        moves.append(tuple((index, pos, -1)))
+                    moves.append(tuple((index, pos, -1)))
+                    # Non facciamo più questa cosa, perchè la calcoliamo nelle filter actions
+                    # if check_tris(state.board, index, pos, player):
+                    #     for r in removable:
+                    #         moves.append(tuple((index, pos, r)))
+                    # else:
+                    #     moves.append(tuple((index, pos, -1)))
 
     return moves
 
@@ -369,3 +371,68 @@ def all_tris_on_board(state, count_check=3):
     }
 
 
+def unlock_opponent_tris(opponent_tris, old_pos):
+    """
+    Questo metodo controlla se la posizione di partenza della fase 2 sblocca un tris eventualmente bloccato in precedenza
+    :param opponent_tris:
+    :param old_pos:
+    :param new_pos:
+    :param opponent:
+    :return:
+    """
+
+    if len(opponent_tris) > 0:
+        # itero tutti i tris e cerco gli adiacenti del tris
+        for tris in opponent_tris:
+            adjacent_of_this_tris = tris_adjacents(tris)
+            if old_pos in adjacent_of_this_tris:
+                return True
+        return False
+    else:
+        return False
+
+
+def check_couples_phase_two(state, old_pos, move, player=None):
+    """
+    questa funzione prende in ingresso lo stato e una possibile mossa
+    restituisce il numero di coppie che si formerebbero nella fase due considerando anche la posizione di partenza
+    :param state:
+    :param old_pos:
+    :param move:
+    :param player:
+    :return:
+    """
+    player = player if player is not None else state.to_move
+
+    tris_presence = 0
+    for tris in all_tris():
+        if move in tris:
+            two_empty = 0
+            one_my_color = 0
+            for pos in tris:
+                if pos != move and pos != old_pos and state.board[pos] == player:
+                    one_my_color += 1
+                if state.board[pos] == 'O':
+                    two_empty += 1
+            if one_my_color == 1 and two_empty == 1:
+                tris_presence += 1
+
+    return tris_presence
+
+
+def move_in_player_tris(player_tris, move):
+    """
+    Controlla se la mossa passata appartiene ad uno dei tris già fatti dal giocatore passato
+    se appartiene ad un tris, restituisce il tris, altrimenti False
+    N.B. restituisco subito il primo tris, perchè se la pedina è in due tris, vuol dire che non si può muovere e quindi
+    non ha senso questo controllo
+    :param player_tris:
+    :param move:
+    :return:
+    """
+
+    for tris in player_tris:
+        if move in tris:
+            return True
+
+    return False
