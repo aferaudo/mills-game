@@ -99,6 +99,9 @@ def delete_pieces_phase2(state):
         # inizialmente non ho vantaggi con questa mossa
         value = 0
 
+        if piece == 14:
+            value += 10
+
         # valutiamo se la la pedina dell'avversario ci blocca un tris
         if check_tris(state.board, -1, piece, player):
             value += tris_weight
