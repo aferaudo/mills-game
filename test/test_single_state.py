@@ -36,8 +36,8 @@ state_phase_two_duoble_game = GameState(to_move='W',
 #                                    'W', 'W', 'W', 'W', 'O', 'O', 'B', 'W', 'O', 'B', 'W', 'O'],
 #                             moves=[2, 6, 8, 16, 17, 20, 23, 11], w_board=9, b_board=7, w_no_board=0, b_no_board=0)
 
-millsGame.display(state_phase_two_duoble_game)
-print("Azioni generate: \n" + str(millsGame.actions(state_phase_two_duoble_game)))
+millsGame.display(state_phase_one_error_double_game)
+print("Azioni generate: \n" + str(millsGame.actions(state_phase_one_error_double_game)))
 
 
 # print(check_couples_phase_two(state_phase_two_duoble_game, 18, 10, 'W'))

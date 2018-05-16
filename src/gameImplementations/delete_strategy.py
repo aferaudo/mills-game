@@ -65,9 +65,9 @@ def delete_pieces_phase1(state):
 
         deletable.append(tuple((move, value)))
 
-    deletable = sorted(deletable, key=lambda x: x[1])
+    deletable = sorted(deletable, key=lambda x: (-x[1], x[0]))
 
-    return deletable[len(deletable)-1] if len(deletable) > 0 else state.moves
+    return deletable[0] if len(deletable) > 0 else state.moves
 
 
 def delete_pieces_phase2(state):
