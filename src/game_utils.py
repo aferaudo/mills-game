@@ -84,7 +84,8 @@ def adjacent_locations(position):
 
 def check_tris_on_board(state, player=None, count_check=3):
     """
-    Restituisce la lista dei tris fatti sulla board
+    Restituisce la lista dei tris fatti sulla board fatti dal giocatore corrente se player non è passato, altrimenti
+    calcola i tris del giocatore passato
     :param game:
     :param state:
     :param player:
@@ -319,3 +320,52 @@ def check_phase(w_no_board, b_no_board, w_board, b_board):
     else:
         return 1
     # TODO check per la fase 3
+
+
+def all_pieces_on_board(state):
+    """
+    Metodo che restituisce tutte le pedine presenti nella board, senza distinzioni tra i giocatori
+    :param state:
+    :return:
+    """
+    # TODO valutare se separare le pedine per giocatore restituendo un dictionary {W: pieces, B: pieces}
+    pieces = []
+    for index, value in enumerate(state.board):
+        if value != 'O':
+            pieces.append(index)
+
+    return pieces
+
+
+def all_tris_on_board(state, count_check=3):
+    """
+    Restituisce un dictionary con tutti i tris fatti da W e tutti i tris fatti da B
+    :param game:
+    :param state:
+    :param player:
+    :param count_check:
+    :return tris_done:
+    """
+    all_pieces = all_pieces_on_board(state)
+    tris_done_w = []
+    tris_done_b = []
+
+    for tris in all_tris():
+        count_w = 0
+        count_b = 0
+        for pos in tris:
+            if pos in all_pieces and state.board[pos] == 'W':
+                count_w += 1
+            if pos in all_pieces and state.board[pos] == 'B':
+                count_b += 1
+        if count_w == count_check:
+            tris_done_w.append(tris)
+        if count_b == count_check:
+            tris_done_b.append(tris)
+
+    return {
+        'W': tris_done_w,
+        'B': tris_done_b
+    }
+
+

@@ -109,7 +109,41 @@ def filter_phase2(game, state):
 
     # TODO Sommare euristica eliminazione pedina
     moves = []
-    moves = MillsGame.can_move(state)
+
+    # TODO Controllare pesi (da fare alla fine)
+    opponent_will_tris = -5
+
+    num_moves_to_return = 5
+
+    player = state.to_move
+    opponent = "B" if player == "W" else "W"
+
+    possible_moves = MillsGame.can_move(state)
+
+    all_board_tris = all_tris_on_board(state)
+    player_tris = all_board_tris['W']
+    opponent_tris = all_board_tris['B']
+
+    for move in possible_moves:
+        # inizialmente non ho vantaggi con questa mossa
+        value = 0
+
+        # valutare se facendo questa mossa consento all'avversario di fare un tris (punteggio negativo)
+        if check_tris(state.board, move[0], move[1], opponent):
+            value += opponent_will_tris
+
+        # valutare se facendo questa mossa libero una tris bloccato avversario (punteggio negativo)
+        if len(opponent_tris) > 0:
+            print()
+
+        # valutare se muovendomi creo una coppia
+
+        # se ho fatto un tris e posso fare il trick di fare tris ogni due mosse
+
+    # alla fine ordinare le mosse sencondo il value in maniere decrescente e poi se il numero di mosse è sotto una
+    # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
+    moves = possible_moves
+
     return moves
 
 
