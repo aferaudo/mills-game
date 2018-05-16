@@ -103,6 +103,21 @@ phase_one_state = test_phase_one(millsGame, True)
 print("Le nostre actions per il giocatore " + phase_one_state.to_move)
 print(millsGame.actions(phase_one_state))
 
+# Test della funzione 'unlock_opponent_tris'
+# millsGame.display(millsGame.initial)
+# opponent_tris = [
+#     [12, 13, 14],
+#     [2, 14, 23]
+# ]
+# old_pos1 = 22
+# old_pos2 = 7
+#
+# print("Test 1 | opponent_tris = " + str(opponent_tris))
+# print(unlock_opponent_tris(opponent_tris, old_pos1))
+#
+# print("Test 2 | opponent_tris = " + str(opponent_tris))
+# print(unlock_opponent_tris(opponent_tris, old_pos2))
+
 # move = int(input("Inserisci mossa: "))
 # x = int(input("Inserisci tris1: "))
 # y = int(input("Inserisci tris1: "))
