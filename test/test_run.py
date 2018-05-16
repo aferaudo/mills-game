@@ -27,6 +27,15 @@ def get_random(extracted):
     return index
 
 
+def get_random_action(actions):
+    """
+    Restituisce un numero random evitando le collisioni
+    :param extracted:
+    :return random:
+    """
+    return random.randint(0, len(actions))
+
+
 def print_current_move(game, old_state, new_state, move, iteration=''):
     print(" --- Iteration " + str(iteration) + " | Player " + old_state.to_move +
           " | " + str(move) + " --- \n")
@@ -106,7 +115,11 @@ def test_phase_one(game, mode=1):
                 extracted.append(next_move[1])
             else:
                 next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
-                next_move = tuple((-1, next_move, -1))
+                if check_tris(current_state.board, -1, next_move, 'B'):
+                    delete_pos = int(input("Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
+                else:
+                    delete_pos = -1
+                next_move = tuple((-1, next_move, delete_pos))
             old_state = current_state
             current_state = game.result(old_state, next_move)
             print_current_move(game, old_state, current_state, next_move, iteration)
@@ -125,11 +138,51 @@ def test_phase_one(game, mode=1):
                 extracted.append(next_move[1])
             else:
                 next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
-                next_move = tuple((-1, next_move, -1))
+                if check_tris(current_state.board, -1, next_move, 'B'):
+                    delete_pos = int(input("Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
+                else:
+                    delete_pos = -1
+                next_move = tuple((-1, next_move, delete_pos))
             old_state = current_state
             current_state = game.result(old_state, next_move)
             print_current_move(game, old_state, current_state, next_move, iteration)
             iteration += 1
+
+    return current_state
+
+
+def test_phase_two(game, state, mode=1):
+    print("********* PHASE 2 *********\n")
+
+    if mode == 1:
+
+        current_state = state
+        iteration = 1
+        extracted = []
+        print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                          current_state.b_board))
+        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                          current_state.b_board) == 2:
+            if current_state.to_move == 'W':
+                start_time = time.time()
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cutt_off, eval_fn)
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+            else:
+                start_time = time.time()
+                actions = game.actions(current_state)
+                next_move_index = get_random_action(actions)
+                next_move = actions[next_move_index]
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+
+            old_state = current_state
+            current_state = game.result(old_state, next_move)
+            print_current_move(game, old_state, current_state, next_move, iteration)
+            iteration += 1
+            print("fase")
+            print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                              current_state.b_board))
 
     return current_state
 
@@ -146,6 +199,7 @@ mode = input("Scegli in quale modalità giocare: \n"
              "- mode = 4 -> Human vs AI\n")
 phase_one_state = test_phase_one(millsGame, int(mode))
 
-print("********* PHASE 2 *********")
-print("Le nostre actions per il giocatore " + phase_one_state.to_move)
-print(millsGame.actions(phase_one_state))
+# print("Le nostre actions per il giocatore " + phase_one_state.to_move)
+# print(millsGame.actions(phase_one_state))
+phase_two_state = test_phase_two(millsGame, phase_one_state, int(mode))
+print(phase_two_state)

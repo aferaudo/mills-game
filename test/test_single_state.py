@@ -7,7 +7,6 @@ GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_
 
 millsGame = MillsGame()
 
-# TODO verificare insieme questo errore in qualche modo forse si può fare
 state_phase_one_error_double_game = GameState(to_move='W',
                                               utility=0,
                                               board=['B', 'W', 'O', 'W', 'O', 'O', 'W', 'W', 'W', 'O', 'W', 'O',
@@ -27,7 +26,7 @@ state_phase_two_duoble_game = GameState(to_move='W',
                                         utility=0,
                                         board=['B', 'O', 'O', 'W', 'O', 'O', 'W', 'W', 'W', 'W', 'O', 'O',
                                                'W', 'O', 'B', 'B', 'B', 'W', 'W', 'W', 'O', 'B', 'O', 'B'],
-                                        moves=[2, 4, 5, 13, 10, 20, 22, 1, 11], w_board=9, b_board=5, w_no_board=0,
+                                        moves=[2, 4, 5, 13, 10, 20, 22, 1, 11], w_board=9, b_board=6, w_no_board=0,
                                         b_no_board=0)
 
 # state_phase_two = GameState(to_move='W',
@@ -36,8 +35,13 @@ state_phase_two_duoble_game = GameState(to_move='W',
 #                                    'W', 'W', 'W', 'W', 'O', 'O', 'B', 'W', 'O', 'B', 'W', 'O'],
 #                             moves=[2, 6, 8, 16, 17, 20, 23, 11], w_board=9, b_board=7, w_no_board=0, b_no_board=0)
 
-millsGame.display(state_phase_one_error_double_game)
-print("Azioni generate: \n" + str(millsGame.actions(state_phase_one_error_double_game)))
+millsGame.display(state_phase_two_duoble_game)
+moves = millsGame.actions(state_phase_two_duoble_game)
+print(state_phase_two_duoble_game)
+print("Azioni generate: \n" + str(moves))
+new_state = millsGame.result(state_phase_two_duoble_game, moves[0])
+print(new_state)
+millsGame.display(new_state)
 
 
 # print(check_couples_phase_two(state_phase_two_duoble_game, 18, 10, 'W'))

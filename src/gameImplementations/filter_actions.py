@@ -35,6 +35,10 @@ def filter_phase1(game, state):
     player = state.to_move
     opponent = "B" if player == "W" else "W"
 
+    # se nella fase 1 stiamo posizionando l'ultima pedina devo per forza fare tris se ne ho la possibilità
+    if (player == 'W' and state.w_no_board == 1) or (player == 'B' and state.b_no_board == 1):
+        tris_weight = 100
+
     moves = []
 
     if state.w_board == 0 and state.b_board == 0:
@@ -167,7 +171,6 @@ def filter_phase2(game, state):
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
 
     moves = sorted(moves, key=lambda x: (-x[2], x[1], x[0]))
-    print("moves after order = " + str(moves))
     if len(moves) > num_moves_to_return:
         moves = moves[0:num_moves_to_return]
 
@@ -176,7 +179,6 @@ def filter_phase2(game, state):
         has_to_delete = check_tris(state.board, move[0], move[1], player)
         if has_to_delete:
             to_delete = delete_pieces_phase2(state)
-            print("To delete = " + str(to_delete))
 
         moves_to_return.append(tuple((move[0], move[1], to_delete[0] if has_to_delete else -1)))
 

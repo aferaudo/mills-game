@@ -229,16 +229,23 @@ def check_double_game(state, move, player=None):
         return False
 
 
-def check_couples(state, move, player=None):
+def check_couples(state, move, player=None, is_delete=False):
     """
     questa funzione prende in ingresso lo stato e una possibile mossa
     restituisce il numero di coppie che si formerebbero
     :param state:
     :param move:
     :param player:
+    :param is_delete:
     :return:
     """
     player = player if player is not None else state.to_move
+
+    num_my_color = 1
+    num_empty = 2
+    if is_delete:
+        num_my_color = 2
+        num_empty = 1
 
     tris_presence = 0
     for tris in all_tris():
@@ -246,11 +253,13 @@ def check_couples(state, move, player=None):
             two_empty = 0
             one_my_color = 0
             for pos in tris:
-                if pos != move and state.board[pos] == player:
+                if pos != move and state.board[pos] == player and not is_delete:
+                    one_my_color += 1
+                if state.board[pos] == player and is_delete:
                     one_my_color += 1
                 if state.board[pos] == 'O':
                     two_empty += 1
-            if one_my_color == 1 and two_empty == 2:
+            if one_my_color == num_my_color and two_empty == num_empty:
                 tris_presence += 1
 
     return tris_presence
@@ -317,7 +326,9 @@ def check_phase(w_no_board, b_no_board, w_board, b_board):
     :param state:
     :return:
     """
-    if w_no_board == 0 and b_no_board == 0:
+    if w_no_board == 0 and b_no_board == 0 and (w_board == 3 or b_board == 3):
+        return 3
+    elif w_no_board == 0 and b_no_board == 0:
         return 2
     else:
         return 1
@@ -414,7 +425,7 @@ def check_couples_phase_two(state, old_pos, move, player=None):
                     one_my_color += 1
                 if state.board[pos] == 'O':
                     two_empty += 1
-            if one_my_color == 1 and two_empty == 1:
+            if one_my_color == 1 and two_empty == 2:
                 tris_presence += 1
 
     return tris_presence

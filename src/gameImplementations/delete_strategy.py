@@ -41,7 +41,7 @@ def delete_pieces_phase1(state):
             value += tris_weight
 
         # valuto se l'avversario ha un doppio gioco o una coppia
-        check_couples_num = check_couples(state, move, opponent)
+        check_couples_num = check_couples(state, move, opponent, True)
         if check_couples_num == 2:
             value += check_couples_num * double_game_opponent
         else:
@@ -104,8 +104,7 @@ def delete_pieces_phase2(state):
             value += tris_weight
 
         # valuto se l'avversario ha un doppio gioco o una coppia
-        # TODO verificare se serve e in ogni caso usare la check_couple per la fase 2
-        check_couples_num = check_couples(state, piece, opponent)
+        check_couples_num = check_couples(state, piece, opponent, True)
         if check_couples_num == 2:
             value += check_couples_num * double_game_opponent
         else:
@@ -130,6 +129,5 @@ def delete_pieces_phase2(state):
         deletable.append(tuple((piece, value)))
 
     deletable = sorted(deletable, key=lambda x: (-x[1], x[0]))
-    print(deletable)
 
     return deletable[0] if len(deletable) > 0 else state.moves
