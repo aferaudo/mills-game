@@ -56,13 +56,13 @@ class MillsGame(Game):
         # print("Phase in actions: " + str(self.Phase))
 
         if phase == 1:
-            moves = filter_phase1(self, state)
+            moves = filter_phase1(state)
 
         if phase == 2:
-            moves = filter_phase2(self, state)
+            moves = filter_phase2(state)
 
         if phase == 3:
-            moves = filter_phase3(self, state)
+            moves = filter_phase3(state)
         return moves
 
     def result(self, state, move):

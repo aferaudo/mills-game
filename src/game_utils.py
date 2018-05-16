@@ -181,7 +181,6 @@ def can_move(state, player=None):
     player = player if player is not None else state.to_move
 
     moves = []
-    removable = can_eliminate(state)
     for index, value in enumerate(state.board):
         if value == player:
             for pos in adjacent_locations(index):
@@ -247,7 +246,7 @@ def check_couples(state, move, player=None, is_delete=False):
         num_my_color = 2
         num_empty = 1
 
-    tris_presence = 0
+    couple_presences = 0
     for tris in all_tris():
         if move in tris:
             two_empty = 0
@@ -260,9 +259,9 @@ def check_couples(state, move, player=None, is_delete=False):
                 if state.board[pos] == 'O':
                     two_empty += 1
             if one_my_color == num_my_color and two_empty == num_empty:
-                tris_presence += 1
+                couple_presences += 1
 
-    return tris_presence
+    return couple_presences
 
 
 def block_pieces(state, move, player=None):
@@ -326,13 +325,14 @@ def check_phase(w_no_board, b_no_board, w_board, b_board):
     :param state:
     :return:
     """
-    if w_no_board == 0 and b_no_board == 0 and (w_board == 3 or b_board == 3):
+    if w_no_board == 0 and b_no_board == 0 and w_board == 3:
+        return 3
+    elif w_no_board == 0 and b_no_board == 0 and b_board == 3:
         return 3
     elif w_no_board == 0 and b_no_board == 0:
         return 2
     else:
         return 1
-    # TODO check per la fase 3
 
 
 def all_pieces_on_board(state):
@@ -415,7 +415,7 @@ def check_couples_phase_two(state, old_pos, move, player=None):
     """
     player = player if player is not None else state.to_move
 
-    tris_presence = 0
+    couple_presence = 0
     for tris in all_tris():
         if move in tris:
             two_empty = 0
@@ -426,9 +426,9 @@ def check_couples_phase_two(state, old_pos, move, player=None):
                 if state.board[pos] == 'O':
                     two_empty += 1
             if one_my_color == 1 and two_empty == 2:
-                tris_presence += 1
+                couple_presence += 1
 
-    return tris_presence
+    return couple_presence
 
 
 def move_in_player_tris(player_tris, move):
@@ -447,3 +447,44 @@ def move_in_player_tris(player_tris, move):
             return True
 
     return False
+
+
+def move_block_tris_phase_3(state, move, opponent):
+    """
+    Controlla se l'avversario ha una coppia con cui può fare tris al turno successivo
+    :param state:
+    :param move:
+    :param opponent:
+    :return:
+    """
+
+    possible_tris = check_tris_with_return(state.board, -1, move, opponent)
+    if possible_tris is not None:
+        possible_tris.remove(move)
+        move_adjacent = list(set(adjacent_locations(move))-set(possible_tris))
+        for pos in move_adjacent:
+            if state.board[pos] == opponent:
+                return True
+
+    return False
+
+
+def check_tris_with_return(board, old_pos, pos_fin, player):
+    """
+    Controlla se con la mossa da effettuare si realizza un tris
+    :param board:
+    :param old_pos:
+    :param pos_fin:
+    :param player:
+    :return: boolean
+    """
+    for tris in all_tris():
+        if pos_fin in tris:
+            count = 0
+            for pos in tris:
+                if pos != pos_fin and board[pos] == player and old_pos != pos:
+                    count += 1
+                if count == 2:
+                    return tris
+
+    return None
