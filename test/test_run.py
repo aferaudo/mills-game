@@ -6,7 +6,7 @@ from src.gameImplementations.delete_strategy import delete_pieces_phase1
 import time
 import random
 
-depth = 5
+depth = 10
 cutt_off = None
 eval_fn = None
 
@@ -175,6 +175,27 @@ def test_phase_two(game, state, mode=1):
                 next_move = actions[next_move_index]
                 end_time = time.time() - start_time
                 print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+
+            old_state = current_state
+            current_state = game.result(old_state, next_move)
+            print_current_move(game, old_state, current_state, next_move, iteration)
+            iteration += 1
+            print("fase")
+            print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                              current_state.b_board))
+
+    elif mode == 2:
+        current_state = state
+        iteration = 1
+        extracted = []
+        print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                          current_state.b_board))
+        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                          current_state.b_board) == 2:
+            start_time = time.time()
+            next_move = alphabeta_cutoff_search(current_state, game, depth, cutt_off, eval_fn)
+            end_time = time.time() - start_time
+            print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
 
             old_state = current_state
             current_state = game.result(old_state, next_move)
