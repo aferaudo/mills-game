@@ -49,8 +49,18 @@ state_phase_two_end = GameState(to_move='B',
                                        'W', 'W', 'O', 'W', 'W', 'O', 'W', 'W', 'B', 'B', 'O', 'B'],
                                 moves=[0, 2, 8, 17, 9, 14, 6, 11, 22], w_board=8, b_board=7, w_no_board=0, b_no_board=0)
 
-millsGame.display(state_phase_two_tris_trick)
-moves = millsGame.actions(state_phase_two_tris_trick)
-print(moves)
+state_phase_three_start = GameState(to_move='B',
+                                    utility=0,
+                                    board=['O', 'W', 'O', 'B', 'W', 'B', 'O', 'O', 'O', 'O', 'O', 'O',
+                                           'O', 'O', 'O', 'W', 'W', 'W', 'W', 'W', 'W', 'O', 'O', 'B'],
+                                    moves=[0, 2, 8, 12, 10, 14, 6, 11, 22, 9, 21, 13, 7], w_board=8,
+                                    b_board=3, w_no_board=0, b_no_board=0)
+
+millsGame.display(state_phase_three_start)
+print("State = " + str(state_phase_three_start))
+moves = millsGame.actions(state_phase_three_start)
+print("Moves = " + str(moves))
+
+
 
 # print(check_couples_phase_two(state_phase_two_duoble_game, 18, 10, 'W'))

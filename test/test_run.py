@@ -6,7 +6,7 @@ from src.gameImplementations.delete_strategy import delete_pieces_phase1
 import time
 import random
 
-depth = 10
+depth = 1
 cutt_off = None
 eval_fn = None
 
@@ -187,7 +187,6 @@ def test_phase_two(game, state, mode=1):
     elif mode == 2:
         current_state = state
         iteration = 1
-        extracted = []
         print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                           current_state.b_board))
         while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
@@ -206,6 +205,10 @@ def test_phase_two(game, state, mode=1):
                               current_state.b_board))
 
     return current_state
+
+
+def test_phase_three(game, state, mode=1):
+    print()
 
 
 # BODY TEST

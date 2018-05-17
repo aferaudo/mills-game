@@ -158,7 +158,6 @@ def filter_phase2(state):
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
 
     moves = sorted(moves, key=lambda x: (-x[2], x[1], x[0]))
-    print(moves)
     if len(moves) > num_moves_to_return:
         moves = moves[0:num_moves_to_return]
 
@@ -173,7 +172,7 @@ def filter_phase2(state):
     return moves_to_return if len(moves_to_return) > 0 else possible_moves
 
 
-def filter_phase3(game, state):
+def filter_phase3(state):
     """
     questa funzione prende in ingresso lo stato e restutuisce le mosse migliori per la fase 3
     (con punteggio più alto)
@@ -221,7 +220,7 @@ def filter_phase3(game, state):
         old_pieces.append(tuple((piece, value)))
 
     old_pieces = sorted(old_pieces, key=lambda x: (x[1], x[0]))  # TODO testare
-    old_piece = old_pieces[0]
+    old_piece = old_pieces[0][0]
     
     for move in possible_moves:
         # inizialmente non ho vantaggi con questa mossa
@@ -253,7 +252,7 @@ def filter_phase3(game, state):
             value += check_couples_num * player_double_game
 
         # aggiungo la mossa alla lista
-        moves.append(tuple((old_piece, move[1], value)))
+        moves.append(tuple((old_piece, move, value)))
 
     # alla fine ordinare le mosse sencondo il value in maniere decrescente e poi se il numero di mosse è sotto una
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
