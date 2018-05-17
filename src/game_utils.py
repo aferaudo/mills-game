@@ -135,9 +135,14 @@ def can_eliminate(state):
     :param player:
     :return:
     """
-    player = 'B' if state.to_move == 'W' else 'W'
-    opponent_pieces = player_pieces(state, player)
-    tris_done = check_tris_on_board(state, player)
+    opponent = 'B' if state.to_move == 'W' else 'W'
+    opponent_pieces = player_pieces(state, opponent)
+
+    if (opponent == "B" and state.b_board == 3) or (opponent == "W" and state.w_board == 3):
+        # se l'avversario è in fase 3 non devo controllare se ha dei tris, perchè posso eliminare quello che voglio
+        return opponent_pieces
+
+    tris_done = check_tris_on_board(state, opponent)
     not_removable = []
     for tris in tris_done:
         for x in tris:
@@ -468,3 +473,56 @@ def check_tris_with_return(board, old_pos, pos_fin, player):
                     return tris
 
     return None
+
+
+def check_couples_future_tris_delete(state, move, player=None):
+    """
+    questa funzione prende in ingresso lo stato e una possibile mossa
+    restituisce il numero di coppie che si formerebbero
+    :param state:
+    :param move:
+    :param player:
+    :param is_delete:
+    :return:
+    """
+    player = player if player is not None else state.to_move
+
+    empty_positions = []
+    for tris in all_tris():
+        if move in tris:
+            one_empty = 0
+            two_my_color = 0
+            for pos in tris:
+                if state.board[pos] == player:
+                    two_my_color += 1
+                if state.board[pos] == 'O':
+                    one_empty += 1
+                    # mi salvo la posizione della casella vuota per poi restituirla se c'è una coppia
+                    empty_pos = pos
+            if two_my_color == 2 and one_empty == 1:
+                empty_positions.append(empty_pos)
+
+    return empty_positions
+
+
+def check_future_tris(cuple_empty_position, board, player):
+    """
+    Prende in ingresso la lista delle posizioni vuote delle coppie di un giocatore e controlla quante di queste posizioni
+    hanno un adiacente dello stesso giocatore e che quindi lo porterebbe a fare un tris
+    :param cuple_empty_position:
+    :param board:
+    :param player:
+    :return:
+    """
+
+    future_tris_count = 0
+    for empty_pos in cuple_empty_position:
+        adjacent = adjacent_locations(empty_pos)
+        count_of_player_pieces = 0
+        for pos in adjacent:
+            if board[pos] == player:
+                count_of_player_pieces += 1
+        if count_of_player_pieces >= 2:
+            future_tris_count += 1
+
+    return future_tris_count

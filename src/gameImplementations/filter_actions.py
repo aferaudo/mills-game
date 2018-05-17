@@ -266,7 +266,7 @@ def filter_phase3(game, state):
     for move in moves:
         has_to_delete = check_tris(state.board, move[0], move[1], player)
         if has_to_delete:
-            to_delete = delete_pieces_phase2(state)
+            to_delete = delete_pieces_phase3(state)
 
         moves_to_return.append(tuple((move[0], move[1], to_delete[0] if has_to_delete else -1)))
 
