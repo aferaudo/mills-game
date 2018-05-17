@@ -105,28 +105,6 @@ def check_tris_on_board(state, player=None, count_check=3):
     return tris_done
 
 
-# TODO Non siamo sicuri che questo sia un metodo realmente utile
-def will_tris(game, state, player=None):
-    """
-    restituisce una lista contenente le mosse che se fatte portano ad un tris
-    :param game:
-    :param state:
-    :param player:
-    :return:
-    """
-    tris = []
-    if game.Phase == 1:
-        tris.extend(check_tris_on_board(game, state, player, 2))
-        # TODO Controllare che il terzo vicino sia vuoto
-    else:
-        print()
-        # TODO Prima facciamo la result della Phase 2
-        # Vogliamo simulare l'aggiornamento di stato usando game.result e poi controlliamo se nel nuovo stato si
-        # verifica un tris, ma prima devo salvare i tris che ho già
-
-    return tris
-
-
 def check_tris(board, old_pos, pos_fin, player):
     """
     Controlla se con la mossa da effettuare si realizza un tris
@@ -186,12 +164,6 @@ def can_move(state, player=None):
             for pos in adjacent_locations(index):
                 if state.board[pos] == 'O':
                     moves.append(tuple((index, pos, -1)))
-                    # Non facciamo più questa cosa, perchè la calcoliamo nelle filter actions
-                    # if check_tris(state.board, index, pos, player):
-                    #     for r in removable:
-                    #         moves.append(tuple((index, pos, r)))
-                    # else:
-                    #     moves.append(tuple((index, pos, -1)))
 
     return moves
 
@@ -341,7 +313,7 @@ def all_pieces_on_board(state):
     :param state:
     :return:
     """
-    # TODO valutare se separare le pedine per giocatore restituendo un dictionary {W: pieces, B: pieces}
+    # valutare se separare le pedine per giocatore restituendo un dictionary {W: pieces, B: pieces}
     pieces = []
     for index, value in enumerate(state.board):
         if value != 'O':
@@ -382,7 +354,7 @@ def all_tris_on_board(state, count_check=3):
     }
 
 
-def unlock_opponent_tris(opponent_tris, old_pos):
+def unlock_opponent_tris_trick(opponent_tris, old_pos):
     """
     Questo metodo controlla se la posizione di partenza della fase 2 sblocca un tris eventualmente bloccato in precedenza
     :param opponent_tris:
@@ -392,17 +364,10 @@ def unlock_opponent_tris(opponent_tris, old_pos):
     :return:
     """
 
-    # TODO questa funzione guarda solo se la posizione di partenza è adiacente al tris ma non se il tris è bloccato
     if len(opponent_tris) > 0:
         # itero tutti i tris e cerco gli adiacenti del tris
         for tris in opponent_tris:
             adjacent_of_this_tris = tris_adjacents(tris)
-
-            # TODO proposta di fix della cosa, controllare insieme
-            # for position in adjacent_of_this_tris:
-            #     if position == 'O':
-            #         return False
-
             if old_pos in adjacent_of_this_tris:
                 return True
         return False
@@ -438,22 +403,27 @@ def check_couples_phase_two(state, old_pos, move, player=None):
     return couple_presence
 
 
-def move_in_player_tris(player_tris, move):
+def move_in_player_tris(board, player_tris, move, opponent):
     """
     Controlla se la mossa passata appartiene ad uno dei tris già fatti dal giocatore passato
-    se appartiene ad un tris, restituisce il tris, altrimenti False
+    se appartiene ad un tris, restituisce il tris, altrimenti False. Restituisce False anche se gli adiacenti della mossa
+    corrente sono occupati da pedine dell'avversario
     N.B. restituisco subito il primo tris, perchè se la pedina è in due tris, vuol dire che non si può muovere e quindi
     non ha senso questo controllo
+    :param board
     :param player_tris:
     :param move:
+    :param opponent
     :return:
     """
 
-    # TODO non controlla se muovendo la pedina l'avversario può bloccare la coppia rimanente occupando il posto di quella che si è spostata?
-    # TODO simile a move_block_tris_phase_3
-    # TODO non controlla se l'avversario sta per fare tris, in quel caso se muovo una pedina dal mio tris poi mi può eliminare una di quelle pedine
+    # non controlla se l'avversario sta per fare tris, deve controllarlo l'algoritmo quando si esegue
     for tris in player_tris:
         if move in tris:
+            adjacent = adjacent_locations(move)
+            for pos in adjacent:
+                if board[pos] == opponent:
+                    return False
             return True
 
     return False

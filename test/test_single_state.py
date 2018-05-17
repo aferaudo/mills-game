@@ -3,6 +3,7 @@ from collections import namedtuple
 from src.MillsGame import MillsGame
 from core.algorithm.aima_alg import *
 from src.game_utils import *
+
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
 millsGame = MillsGame()
@@ -29,6 +30,13 @@ state_phase_two_duoble_game = GameState(to_move='W',
                                         moves=[2, 4, 5, 13, 10, 20, 22, 1, 11], w_board=9, b_board=6, w_no_board=0,
                                         b_no_board=0)
 
+state_phase_two_tris_trick = GameState(to_move='W',
+                                       utility=0,
+                                       board=['B', 'O', 'W', 'W', 'O', 'W', 'W', 'O', 'O', 'O', 'O', 'O',
+                                              'O', 'W', 'B', 'B', 'B', 'O', 'W', 'W', 'W', 'B', 'W', 'B'],
+                                       moves=[9, 4, 8, 12, 10, 17, 7, 1, 11], w_board=9, b_board=6, w_no_board=0,
+                                       b_no_board=0)
+
 # state_phase_two = GameState(to_move='W',
 #                             utility=0,
 #                             board=['B', 'B', 'O', 'B', 'W', 'B', 'O', 'B', 'O', 'W', 'W', 'O',  # l'ultima è la 11
@@ -41,9 +49,8 @@ state_phase_two_end = GameState(to_move='B',
                                        'W', 'W', 'O', 'W', 'W', 'O', 'W', 'W', 'B', 'B', 'O', 'B'],
                                 moves=[0, 2, 8, 17, 9, 14, 6, 11, 22], w_board=8, b_board=7, w_no_board=0, b_no_board=0)
 
-millsGame.display(state_phase_one_error_double_game)
-moves = millsGame.actions(state_phase_one_error_double_game)
+millsGame.display(state_phase_two_tris_trick)
+moves = millsGame.actions(state_phase_two_tris_trick)
 print(moves)
-
 
 # print(check_couples_phase_two(state_phase_two_duoble_game, 18, 10, 'W'))

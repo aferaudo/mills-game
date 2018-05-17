@@ -107,8 +107,6 @@ def filter_phase2(state):
     :param state:
     :return:
     """
-
-    # TODO Sommare euristica eliminazione pedina
     moves = []
 
     # TODO Controllare pesi (da fare alla fine)
@@ -117,7 +115,6 @@ def filter_phase2(state):
     player_couple = 2
     player_double_game = 5
     opponent_tris_will_unlock = -5
-
 
     num_moves_to_return = 5
 
@@ -139,13 +136,11 @@ def filter_phase2(state):
             value += player_will_tris
 
         # valutare se facendo questa mossa libero una tris bloccato avversario (punteggio negativo)
-        if unlock_opponent_tris(opponent_tris, move[0]):
+        if unlock_opponent_tris_trick(opponent_tris, move[0]):
             value += opponent_tris_will_unlock
 
         # valutare se muovendomi creo una coppia o un doppio gioco
-        # TODO valutare se può essere intelligente considerare come coppia favorevole se la terza pedina della coppia è occupata dall'avversario (ATTENZIONE: questa cosa è già controllata perchè dice che fai coppia solo se la terza è vuota)
-        # TODO fare coppia e basta non è sufficente in fase due, ha senso se facendo coppia, il turno dopo posso fare tris (questa cosa la vede l'algoritmo esplorando in profondità quindi non è da implementare) dare pesi bassi al fatto di fare coppia oppure controllare che al turno dopo faccio tris
-        # TODO se da implementare simile a move_block_tris_phase_3
+        # LO VALUTA L'ALGORITMO fare coppia e basta non è sufficente in fase due, ha senso se facendo coppia, il turno dopo posso fare tris
         check_couples_num = check_couples_phase_two(state, move[0], move[1], player)
         if check_couples_num == 2:
             value += check_couples_num * player_double_game  # gli do un valore basso il doppio gioco è importante nella fase 1, meno nella 2
@@ -153,7 +148,7 @@ def filter_phase2(state):
             value += check_couples_num * player_couple
 
         # se ho fatto un tris e posso fare il trick di fare tris ogni due mosse
-        if move_in_player_tris(player_tris, move[0]):
+        if move_in_player_tris(state.board, player_tris, move[0], opponent):
             value += player_tris_trick
 
         # aggiungo la mossa alla lista
@@ -163,6 +158,7 @@ def filter_phase2(state):
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
 
     moves = sorted(moves, key=lambda x: (-x[2], x[1], x[0]))
+    print(moves)
     if len(moves) > num_moves_to_return:
         moves = moves[0:num_moves_to_return]
 
@@ -185,8 +181,6 @@ def filter_phase3(game, state):
     :param state:
     :return:
     """
-
-    # TODO Sommare euristica eliminazione pedina
     moves = []
 
     # TODO Controllare pesi (da fare alla fine)
