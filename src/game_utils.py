@@ -296,15 +296,20 @@ def tris_adjacents(tris):
     return adjacents
 
 
-def check_phase(w_no_board, b_no_board, w_board, b_board):
+def check_phase(w_no_board, b_no_board, w_board, b_board, player):
     """
     Controllo in base allo stato in quale fase siamo e restituisce il numero della fase
-    :param state:
+    :param w_no_board:
+    :param b_no_board:
+    :param w_board:
+    :param b_board:
+    :param player:
     :return:
     """
-    if w_no_board == 0 and b_no_board == 0 and w_board == 3:
+
+    if w_no_board == 0 and b_no_board == 0 and w_board == 3 and player == "W":
         return 3
-    elif w_no_board == 0 and b_no_board == 0 and b_board == 3:
+    elif w_no_board == 0 and b_no_board == 0 and b_board == 3 and player == "B":
         return 3
     elif w_no_board == 0 and b_no_board == 0:
         return 2
@@ -444,6 +449,7 @@ def move_block_tris_phase_3(state, move, opponent):
     """
 
     possible_tris = check_tris_with_return(state.board, -1, move, opponent)
+
     if possible_tris is not None:
         possible_tris.remove(move)
         move_adjacent = list(set(adjacent_locations(move))-set(possible_tris))
@@ -456,7 +462,7 @@ def move_block_tris_phase_3(state, move, opponent):
 
 def check_tris_with_return(board, old_pos, pos_fin, player):
     """
-    Controlla se con la mossa da effettuare si realizza un tris
+    Controlla se con la mossa da effettuare si realizza un tris e nel caso lo restituisce
     :param board:
     :param old_pos:
     :param pos_fin:

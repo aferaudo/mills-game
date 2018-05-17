@@ -51,7 +51,7 @@ class MillsGame(Game):
         moves = state.moves
         player = state.to_move
 
-        phase = check_phase(state.w_no_board, state.b_no_board, state.w_board, state.b_board)
+        phase = check_phase(state.w_no_board, state.b_no_board, state.w_board, state.b_board, player)
 
         # print("Phase in actions: " + str(self.Phase))
 

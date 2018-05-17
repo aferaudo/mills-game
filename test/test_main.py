@@ -48,7 +48,7 @@ def test_phase_one(game, use_random=False):
 
         iteration = 1
         while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
-                          current_state.b_board) == 1:
+                          current_state.b_board, current_state.to_move) == 1:
             end_time = 0.0
             if current_state.to_move == 'W':
                 start_time = time.time()
@@ -81,7 +81,8 @@ def test_phase_one(game, use_random=False):
         print(game.initial, end='\n\n')
 
         iteration = 1
-        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 1:
+        while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                          current_state.b_board, current_state.to_move) == 1:
             end_time = 0.0
             start_time = time.time()
             next_move = alphabeta_cutoff_search(current_state, game, depth, cutt_off, eval_fn)

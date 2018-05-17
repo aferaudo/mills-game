@@ -183,10 +183,11 @@ def filter_phase3(state):
     moves = []
 
     # TODO Controllare pesi (da fare alla fine)
-    player_will_tris = 4
-    player_double_game = 5
+    player_will_tris = 20
+    player_couple_game = 2
     opponent_will_tris = 10
     piece_to_not_move = 15
+    player_couple_game_possible_muvment = 5
 
     num_moves_to_return = 5
 
@@ -196,6 +197,7 @@ def filter_phase3(state):
     possible_moves = state.moves
     p_pieces = player_pieces(state, player)
 
+    # TODO Eliminare la scelta della pedina (che verrà fatta dall'algoritmo) e filtrare soltanto le mosse
     # guardo quale delle mie pedine di partenza non devo muovere
     old_pieces = []
     for piece in p_pieces:
@@ -204,12 +206,10 @@ def filter_phase3(state):
         # controllo se muovendo la pedina l'avversario farà tris
         if opponent == 'W' and state.w_board == 3:
             # W è in fase 3
-
             if check_tris(state.board, -1, piece, opponent):
                 value += piece_to_not_move
         elif opponent == 'B' and state.b_board == 3:
             # B è in fase 3
-
             if check_tris(state.board, -1, piece, opponent):
                 value += piece_to_not_move
         else:
@@ -217,9 +217,15 @@ def filter_phase3(state):
             if move_block_tris_phase_3(state, piece, opponent):
                 value += piece_to_not_move
 
+        # controllo se la pedina che voglio muovere fa coppia
+        couples_with_piece = check_couples(state, piece, player, True)
+        value += couples_with_piece * player_couple_game_possible_muvment
+
         old_pieces.append(tuple((piece, value)))
 
     old_pieces = sorted(old_pieces, key=lambda x: (x[1], x[0]))  # TODO testare
+    # TODO print da eliminare
+    print("Old pieces: " + str(old_pieces))
     old_piece = old_pieces[0][0]
     
     for move in possible_moves:
@@ -233,23 +239,22 @@ def filter_phase3(state):
         # valutare se l'avversario sta per fare tris
         if opponent == 'W' and state.w_board == 3:
             # W è in fase 3
-
             if check_tris(state.board, -1, move, opponent):
                 value += opponent_will_tris
+
         elif opponent == 'B' and state.b_board == 3:
             # B è in fase 3
-
             if check_tris(state.board, -1, move, opponent):
                 value += opponent_will_tris
+
         else:
-            # il opponent è in fase 2
+            # L'opponent è in fase 2
             if move_block_tris_phase_3(state, move, opponent):
                 value += opponent_will_tris
 
         # valutare se muovendomi creo un doppio gioco
         check_couples_num = check_couples(state, move, player)
-        if check_couples_num == 2:
-            value += check_couples_num * player_double_game
+        value += check_couples_num * player_couple_game
 
         # aggiungo la mossa alla lista
         moves.append(tuple((old_piece, move, value)))
@@ -258,6 +263,8 @@ def filter_phase3(state):
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
 
     moves = sorted(moves, key=lambda x: (-x[2], x[1], x[0]))
+    # TODO PRINT DA ELIMINARE
+    print("Moves: " + str(moves))
     if len(moves) > num_moves_to_return:
         moves = moves[0:num_moves_to_return]
 

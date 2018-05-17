@@ -56,10 +56,21 @@ state_phase_three_start = GameState(to_move='B',
                                     moves=[0, 2, 8, 12, 10, 14, 6, 11, 22, 9, 21, 13, 7], w_board=8,
                                     b_board=3, w_no_board=0, b_no_board=0)
 
-millsGame.display(state_phase_three_start)
-print("State = " + str(state_phase_three_start))
-moves = millsGame.actions(state_phase_three_start)
+state_phase_three_test = GameState(to_move='B', utility=0, board=['O', 'W', 'O', 'W', 'O', 'O', 'O', 'O', 'O', 'O', 'W', 'W', 'O', 'O', 'B', 'B', 'W', 'W', 'O', 'O', 'W', 'O', 'O', 'B'], moves=[0, 4, 8, 12, 18, 5, 6, 2, 22, 9, 21, 13, 7, 19], w_board=7, b_board=3, w_no_board=0, b_no_board=0)
+
+
+
+# millsGame.display(state_phase_three_start)
+# print("State = " + str(state_phase_three_start))
+# moves = millsGame.actions(state_phase_three_start)
+# print("Moves = " + str(moves))
+
+millsGame.display(state_phase_three_test)
+print("State = " + str(state_phase_three_test))
+moves = millsGame.actions(state_phase_three_test)
 print("Moves = " + str(moves))
+
+
 
 
 
