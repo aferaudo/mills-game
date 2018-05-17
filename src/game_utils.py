@@ -392,10 +392,17 @@ def unlock_opponent_tris(opponent_tris, old_pos):
     :return:
     """
 
+    # TODO questa funzione guarda solo se la posizione di partenza è adiacente al tris ma non se il tris è bloccato
     if len(opponent_tris) > 0:
         # itero tutti i tris e cerco gli adiacenti del tris
         for tris in opponent_tris:
             adjacent_of_this_tris = tris_adjacents(tris)
+
+            # TODO proposta di fix della cosa, controllare insieme
+            # for position in adjacent_of_this_tris:
+            #     if position == 'O':
+            #         return False
+
             if old_pos in adjacent_of_this_tris:
                 return True
         return False
@@ -442,6 +449,9 @@ def move_in_player_tris(player_tris, move):
     :return:
     """
 
+    # TODO non controlla se muovendo la pedina l'avversario può bloccare la coppia rimanente occupando il posto di quella che si è spostata?
+    # TODO simile a move_block_tris_phase_3
+    # TODO non controlla se l'avversario sta per fare tris, in quel caso se muovo una pedina dal mio tris poi mi può eliminare una di quelle pedine
     for tris in player_tris:
         if move in tris:
             return True

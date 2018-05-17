@@ -143,7 +143,9 @@ def filter_phase2(state):
             value += opponent_tris_will_unlock
 
         # valutare se muovendomi creo una coppia o un doppio gioco
-        # TODO valutare se può essere intelligente considerare come coppia favorevole se la terza pedina della coppia è occupata dall'avversario
+        # TODO valutare se può essere intelligente considerare come coppia favorevole se la terza pedina della coppia è occupata dall'avversario (ATTENZIONE: questa cosa è già controllata perchè dice che fai coppia solo se la terza è vuota)
+        # TODO fare coppia e basta non è sufficente in fase due, ha senso se facendo coppia, il turno dopo posso fare tris (questa cosa la vede l'algoritmo esplorando in profondità quindi non è da implementare) dare pesi bassi al fatto di fare coppia oppure controllare che al turno dopo faccio tris
+        # TODO se da implementare simile a move_block_tris_phase_3
         check_couples_num = check_couples_phase_two(state, move[0], move[1], player)
         if check_couples_num == 2:
             value += check_couples_num * player_double_game  # gli do un valore basso il doppio gioco è importante nella fase 1, meno nella 2
@@ -178,7 +180,7 @@ def filter_phase2(state):
 def filter_phase3(game, state):
     """
     questa funzione prende in ingresso lo stato e restutuisce le mosse migliori per la fase 3
-    ( con punteggio più alto)
+    (con punteggio più alto)
     :param game:
     :param state:
     :return:
