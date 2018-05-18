@@ -197,7 +197,6 @@ def filter_phase3(state):
     possible_moves = state.moves
     p_pieces = player_pieces(state, player)
 
-    # TODO Eliminare la scelta della pedina (che verrà fatta dall'algoritmo) e filtrare soltanto le mosse
     # guardo quale delle mie pedine di partenza non devo muovere
     old_pieces = []
     for piece in p_pieces:
@@ -222,11 +221,6 @@ def filter_phase3(state):
         value += couples_with_piece * player_couple_game_possible_muvment
 
         old_pieces.append(tuple((piece, value)))
-
-    # old_pieces = sorted(old_pieces, key=lambda x: (x[1], x[0]))  # TODO testare
-    # TODO print da eliminare
-    print("Old pieces: " + str(old_pieces))
-    # old_piece = old_pieces[0][0]
     
     for move in possible_moves:
         # inizialmente non ho vantaggi con questa mossa
@@ -264,8 +258,7 @@ def filter_phase3(state):
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
 
     moves = sorted(moves, key=lambda x: (-x[2], x[1], x[0]))
-    # TODO PRINT DA ELIMINARE
-    print("Moves: " + str(moves))
+
     if len(moves) > num_moves_to_return:
         moves = moves[0:num_moves_to_return]
 
@@ -275,8 +268,6 @@ def filter_phase3(state):
             new_moves.append(tuple((old_position[0], move[1], move[2] - old_position[1])))
 
     new_moves = sorted(new_moves, key=lambda x: (-x[2], x[1], x[0]))
-    # TODO PRINT DA ELIMINARE
-    print("New moves: " + str(new_moves))
 
     moves_to_return = []
     for move in new_moves:

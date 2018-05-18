@@ -7,9 +7,10 @@ from src.gameImplementations.evaluation import *
 import time
 import random
 
-depth = 1
+depth = 11
 cut_off = None
-eval_fn = None
+eval_fn = eval_fn_smart
+eval_fn_opponent = eval_fn_stupid
 
 
 def get_random(extracted):
@@ -94,7 +95,10 @@ def test_phase_one(game, mode=1):
         while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                           current_state.b_board, current_state.to_move) == 1:
             start_time = time.time()
-            next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn)
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn)
+            else:
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent)
             end_time = time.time() - start_time
             print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
             old_state = current_state
@@ -192,7 +196,10 @@ def test_phase_two(game, state, mode=1):
         while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                           current_state.b_board, current_state.to_move) == 2:
             start_time = time.time()
-            next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn)
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn)
+            else:
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent)
             end_time = time.time() - start_time
             print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
 
@@ -243,7 +250,10 @@ def test_phase_three(game, state, mode=1):
                           current_state.b_board, current_state.to_move))
         while compute_utility(current_state, current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 0:
             start_time = time.time()
-            next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn)
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn)
+            else:
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent)
             end_time = time.time() - start_time
             print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
 
@@ -257,8 +267,8 @@ def test_phase_three(game, state, mode=1):
 
     return current_state
 
-# BODY TEST
 
+# BODY TEST
 
 millsGame = MillsGame()
 # mode = 2

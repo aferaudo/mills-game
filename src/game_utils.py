@@ -532,3 +532,18 @@ def check_future_tris(cuple_empty_position, board, player):
             future_tris_count += 1
 
     return future_tris_count
+
+
+def will_tris(board, piece, player):
+    """
+    Controlla se gli adiacenti di una pedina possono fare tris muovendosi
+    :param board: 
+    :param piece: 
+    :param player: 
+    :return: 
+    """
+
+    move_adjacent = adjacent_locations(piece)
+    for pos in move_adjacent:
+        if check_tris(board, piece, pos, player):
+            return True

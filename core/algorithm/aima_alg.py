@@ -90,9 +90,17 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
     # Functions used by alphabeta
     def max_value(state, alpha, beta, depth):
         if cutoff_test(state, depth):
-            return eval_fn(state)
+            eval_value = eval_fn(state)
+            # print("Eval value = " + str(eval_value))
+            # print("----------------------\n\n")
+            return eval_value
         v = -infinity
         for a in game.actions(state):
+            # print("Giocatore = " + state.to_move)
+            # print("Profondità esplorata = " + str(depth))
+            # print("Mossa corrente = " + str(a))
+            # print("State = " + str(state))
+            # print("----------------------\n\n")
             v = max(v, min_value(game.result(state, a),
                                  alpha, beta, depth + 1))
             if v >= beta:
@@ -102,9 +110,17 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
 
     def min_value(state, alpha, beta, depth):
         if cutoff_test(state, depth):
-            return eval_fn(state)
+            eval_value = eval_fn(state)
+            # print("Eval value = " + str(eval_value))
+            # print("----------------------\n\n")
+            return eval_value
         v = infinity
         for a in game.actions(state):
+            # print("Giocatore = " + state.to_move)
+            # print("Profondità esplorata = " + str(depth))
+            # print("Mossa corrente = " + str(a))
+            # print("State = " + str(state))
+            # print("----------------------\n\n")
             v = min(v, max_value(game.result(state, a),
                                  alpha, beta, depth + 1))
             if v <= alpha:
@@ -122,6 +138,11 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
     beta = infinity
     best_action = None
     for a in game.actions(state):
+        # print("Giocatore = " + state.to_move)
+        # print("Profondità esplorata = " + str(0))
+        # print("Mossa corrente = " + str(a))
+        # print("State = " + str(state))
+        # print("----------------------\n\n")
         v = min_value(game.result(state, a), best_score, beta, 1)
         if v > best_score:
             best_score = v
