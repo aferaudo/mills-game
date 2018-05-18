@@ -2,6 +2,27 @@
 
 from ..MillsGame import *
 from ..game_utils import *
+from .result import compute_utility
+
+
+def get_utility(state):
+    return compute_utility(state, state.w_no_board, state.b_no_board, state.w_board, state.b_board)
+
+
+def eval_fn_stupid(state):
+    victory = get_utility(state)
+    print("giocatore: " + state.to_move)
+    if state.to_move == 'W':
+        print("ritorno eval_stupid: " + str(state.w_board - state.b_board + victory))
+        return state.w_board - state.b_board + victory
+    else:
+        print("ritorno eval_stupid: " + str(state.b_board - state.w_board + victory))
+        return state.b_board - state.w_board + victory
+
+
+def eval_fn_smart(state):
+    # implementare con diverse fasi
+    print()
 
 
 def eval_fun_phase1(state):

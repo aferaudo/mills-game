@@ -189,7 +189,7 @@ def filter_phase3(state):
     piece_to_not_move = 15
     player_couple_game_possible_muvment = 5
 
-    num_moves_to_return = 5
+    num_moves_to_return = 2
 
     player = state.to_move
     opponent = "B" if player == "W" else "W"
@@ -223,10 +223,10 @@ def filter_phase3(state):
 
         old_pieces.append(tuple((piece, value)))
 
-    old_pieces = sorted(old_pieces, key=lambda x: (x[1], x[0]))  # TODO testare
+    # old_pieces = sorted(old_pieces, key=lambda x: (x[1], x[0]))  # TODO testare
     # TODO print da eliminare
     print("Old pieces: " + str(old_pieces))
-    old_piece = old_pieces[0][0]
+    # old_piece = old_pieces[0][0]
     
     for move in possible_moves:
         # inizialmente non ho vantaggi con questa mossa
@@ -257,7 +257,8 @@ def filter_phase3(state):
         value += check_couples_num * player_couple_game
 
         # aggiungo la mossa alla lista
-        moves.append(tuple((old_piece, move, value)))
+        moves.append(tuple((-1, move, value)))
+
 
     # alla fine ordinare le mosse sencondo il value in maniere decrescente e poi se il numero di mosse è sotto una
     # certa soglia le restituisco tutte altrimenti taglio solo ad N mosse
@@ -268,8 +269,17 @@ def filter_phase3(state):
     if len(moves) > num_moves_to_return:
         moves = moves[0:num_moves_to_return]
 
+    new_moves = []
+    for old_position in old_pieces:
+        for move in moves:
+            new_moves.append(tuple((old_position[0], move[1], move[2] - old_position[1])))
+
+    new_moves = sorted(new_moves, key=lambda x: (-x[2], x[1], x[0]))
+    # TODO PRINT DA ELIMINARE
+    print("New moves: " + str(new_moves))
+
     moves_to_return = []
-    for move in moves:
+    for move in new_moves:
         has_to_delete = check_tris(state.board, move[0], move[1], player)
         if has_to_delete:
             to_delete = delete_pieces_phase3(state)

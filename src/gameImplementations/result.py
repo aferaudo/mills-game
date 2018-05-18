@@ -72,17 +72,18 @@ def compute_utility(state, w_no_board, b_no_board, w_board, b_board):
     """If 'W' wins with this move, return 1; if 'B' wins return -1; else return 0.
     É provvisoria solo per la fase 1
     """
+    victory_value = 1000
     if check_phase(w_no_board, b_no_board, w_board, b_board, state.to_move) == 1:
         # TODO Why?
         if w_no_board == 0 and b_no_board == 0:
-            return 1 if state.to_move == 'W' else -1
+            return victory_value if state.to_move == 'W' else -victory_value
         else:
             return 0
 
     else:
         if state.to_move == 'W' and (b_board == 2 or len(can_move(state, 'B')) == 0):
-            return 1
+            return victory_value
         elif state.to_move == 'B' and (w_board == 2 or len(can_move(state, 'W')) == 0):
-            return -1
+            return -victory_value
         else:
             return 0

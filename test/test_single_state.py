@@ -3,6 +3,7 @@ from collections import namedtuple
 from src.MillsGame import MillsGame
 from core.algorithm.aima_alg import *
 from src.game_utils import *
+from src.gameImplementations.evaluation import *
 
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
@@ -70,6 +71,13 @@ print("State = " + str(state_phase_three_test))
 moves = millsGame.actions(state_phase_three_test)
 print("Moves = " + str(moves))
 
+depth = 8
+move = alphabeta_cutoff_search(state_phase_three_test, millsGame, depth, None, eval_fn_stupid)
+print("AlfaBeta move = " + str(move))
+
+next_state = millsGame.result(state_phase_three_test, move)
+millsGame.display(next_state)
+print("stato = " + str(next_state))
 
 
 
