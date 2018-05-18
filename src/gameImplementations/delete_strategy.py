@@ -117,6 +117,9 @@ def delete_pieces_phase2(state):
         num_future_tris = check_future_tris(check_couples_list, state.board, opponent)
         value += num_future_tris * tris_weight
 
+        if will_tris(state.board, piece, opponent):
+            value += tris_weight
+
         # valuto se l'avversario blocca un doppio gioco
         check_double_occupied = check_couples(state, piece, player)
         if check_double_occupied == 2:
@@ -149,7 +152,7 @@ def delete_pieces_phase3(state):
     """
 
     couple_opponent = 2
-    tris_weight = 7
+    tris_weight = 10
     double_game_opponent = 4
 
     player = state.to_move
@@ -178,6 +181,10 @@ def delete_pieces_phase3(state):
         # valuto se gli adiacenti delle coppie contengono una pedina che gli permette di fare tris
         num_future_tris = check_future_tris(check_couples_list, state.board, opponent)
         value += num_future_tris * tris_weight
+
+        # valuto se la pedina dell'avversario muovendosi può fare tris
+        if will_tris(state.board, piece, opponent):
+            value += tris_weight
 
         deletable.append(tuple((piece, value)))
 

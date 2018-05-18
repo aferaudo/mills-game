@@ -7,9 +7,9 @@ from src.gameImplementations.evaluation import *
 import time
 import random
 
-depth = 1
+depth = 9
 cut_off = None
-eval_fn = None
+eval_fn = eval_fn_smart
 
 
 def get_random(extracted):
