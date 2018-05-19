@@ -70,16 +70,40 @@ state_delete_for_win = GameState(to_move='W',
                                         'O', 'W', 'O', 'O', 'O', 'O', 'B', 'W', 'O', 'W', 'B', 'W'],
                                  moves=[12, 14, 15, 16, 17, 20, 5], w_board=9, b_board=8, w_no_board=0, b_no_board=0)
 
+state_run_error = GameState(to_move='W',
+                            utility=0,
+                            board=['W', 'O', 'W', 'B', 'W', 'W', 'B', 'B', 'O', 'B', 'W', 'B',
+                                   'B', 'W', 'B', 'W', 'B', 'W', 'O', 'O', 'B', 'O', 'O', 'O'],
+                            moves=[18, 1, 8, 19, 21, 22, 23], w_board=8, b_board=9, w_no_board=0, b_no_board=0)
+
+temp_state = GameState(to_move='B', utility=0, board=['W', 'W', 'B', 'O', 'B', 'B', 'B', 'B', 'W', 'O', 'B', 'W', 'O', 'W', 'O', 'O', 'W', 'W', 'W', 'W', 'B', 'B', 'O', 'B'], moves=[3, 14, 12, 15, 9, 22], w_board=9, b_board=9, w_no_board=0, b_no_board=0)
+
 
 # millsGame.display(state_phase_three_start)
 # print("State = " + str(state_phase_three_start))
 # moves = millsGame.actions(state_phase_three_start)
 # print("Moves = " + str(moves))
 
-millsGame.display(state_delete_for_win)
-print("State = " + str(state_delete_for_win))
-moves = millsGame.actions(state_delete_for_win)
+millsGame.display(temp_state)
+print("State = " + str(temp_state))
+moves = millsGame.actions(temp_state)
 print("Moves = " + str(moves))
+
+depth = 11
+
+next_move = alphabeta_cutoff_search(temp_state, millsGame, depth, None, eval_fn_smart)
+print(next_move)
+
+next_state = millsGame.result(temp_state, next_move)
+millsGame.display(next_state)
+print(next_state)
+
+next_move = alphabeta_cutoff_search(next_state, millsGame, depth, None, eval_fn_smart)
+print(next_move)
+
+next_state = millsGame.result(next_state, next_move)
+millsGame.display(next_state)
+print(next_state)
 
 # print("State = " + str(state_phase_three_test))
 # moves = millsGame.actions(state_phase_three_test)

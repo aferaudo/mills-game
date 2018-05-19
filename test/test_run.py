@@ -8,7 +8,7 @@ from src.gameImplementations.evaluation import *
 import time
 import random
 
-depth = 9
+depth = 10
 depth_opponent = depth
 time_depth = 100
 cut_off = None
