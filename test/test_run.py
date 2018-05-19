@@ -2,15 +2,17 @@ from src.MillsGame import MillsGame, can_eliminate
 from core.algorithm.aima_alg import *
 from src.game_utils import *
 from src.gameImplementations.result import compute_utility
+from src.gameImplementations.delete_strategy import *
 from src.gameImplementations.evaluation import *
 
 import time
 import random
 
-depth = 12
-time_depth = 58
+depth = 10
+time_depth = 0.5
 cut_off = None
 eval_fn = eval_fn_smart
+eval_fn_opponent = eval_fn_stupid
 
 
 def get_random(extracted):
@@ -38,11 +40,28 @@ def get_random_action(actions):
     return random.randint(0, len(actions))
 
 
-def print_current_move(game, old_state, new_state, move, iteration=''):
+def print_current_move(game, old_state, new_state, move, iteration='', deletables=None):
     print(" --- Iteration " + str(iteration) + " | Player " + old_state.to_move +
-          " | " + str(move) + " --- \n")
+          " | " + str(move) + " --- \n\n")
+    if len(deletables):
+        print("Le pedine eliminabili erano: " + str(deletables), end='\n\n')
     game.display(new_state)
+    print('\n\n')
     print(new_state, end='\n\n')
+
+
+def get_deletable(state, move, phase):
+    deletables = []
+    if move[2] != -1:
+
+        if phase == 1:
+            deletables = delete_pieces_phase1(state, True)
+        elif phase == 2:
+            deletables = delete_pieces_phase2(state, True)
+        elif phase == 3:
+            deletables = delete_pieces_phase3(state, True)
+
+    return deletables
 
 
 def test_phase_one(game, mode=1):
@@ -95,12 +114,16 @@ def test_phase_one(game, mode=1):
         while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                           current_state.b_board, current_state.to_move) == 1:
             start_time = time.time()
-            next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+            else:
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent, time_depth)
             end_time = time.time() - start_time
             print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+            deletables = get_deletable(current_state, next_move, 1)
             old_state = current_state
             current_state = game.result(old_state, next_move)
-            print_current_move(game, old_state, current_state, next_move, iteration)
+            print_current_move(game, old_state, current_state, next_move, iteration, deletables)
             iteration += 1
 
     elif mode == 3:
@@ -193,13 +216,17 @@ def test_phase_two(game, state, mode=1):
         while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                           current_state.b_board, current_state.to_move) == 2:
             start_time = time.time()
-            next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+            else:
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent, time_depth)
             end_time = time.time() - start_time
             print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
 
+            deletables = get_deletable(current_state, next_move, 1)
             old_state = current_state
             current_state = game.result(old_state, next_move)
-            print_current_move(game, old_state, current_state, next_move, iteration)
+            print_current_move(game, old_state, current_state, next_move, iteration, deletables)
             iteration += 1
             print("fase")
             print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
@@ -244,13 +271,17 @@ def test_phase_three(game, state, mode=1):
                           current_state.b_board, current_state.to_move))
         while compute_utility(current_state, current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 0:
             start_time = time.time()
-            next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+            else:
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent, time_depth)
             end_time = time.time() - start_time
             print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
 
+            deletables = get_deletable(current_state, next_move, 1)
             old_state = current_state
             current_state = game.result(old_state, next_move)
-            print_current_move(game, old_state, current_state, next_move, iteration)
+            print_current_move(game, old_state, current_state, next_move, iteration, deletables)
             iteration += 1
             print("fase")
             print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
@@ -258,23 +289,66 @@ def test_phase_three(game, state, mode=1):
 
     return current_state
 
+
+def test_all_game(game, mode=2):
+    print("\n******************************************************")
+    print("**************  NINE MEN'S MORRIS GAME  **************")
+    print("******************************************************", end='\n\n')
+    iteration = 1
+    old_phase = 0
+    current_state = game.initial
+
+    game.display(current_state)
+
+    while not game.terminal_test(current_state) and iteration < 100:
+
+        phase = check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board, current_state.to_move)
+
+        if phase != old_phase:
+            old_phase = phase
+            print("\n\n**************  FASE " + str(phase) + "  **************", end='\n\n')
+
+        if mode == 2:
+            start_time = time.time()
+            if current_state.to_move == 'W':
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+            else:
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent, time_depth)
+            end_time = time.time() - start_time
+            print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+
+            deletables = get_deletable(current_state, next_move, phase)
+            old_state = current_state
+            current_state = game.result(old_state, next_move)
+            print_current_move(game, old_state, current_state, next_move, iteration, deletables)
+            iteration += 1
+
+            print("Siamo ancora in fase " + str(phase))
+
+    return current_state
+
+
 # BODY TEST
 
 
 millsGame = MillsGame()
-# mode = 2
-mode = input("Scegli in quale modalità giocare: \n"
-             "- mode = 1 -> AI vs Random \n"
-             "- mode = 2 -> AI vs AI \n"
-             "- mode = 3 -> AI vs Human \n"
-             "- mode = 4 -> Human vs AI\n")
-phase_one_state = test_phase_one(millsGame, int(mode))
+mode = 2
+# mode = input("Scegli in quale modalità giocare: \n"
+#              "- mode = 1 -> AI vs Random \n"
+#              "- mode = 2 -> AI vs AI \n"
+#              "- mode = 3 -> AI vs Human \n"
+#              "- mode = 4 -> Human vs AI\n"
+#              )
+
+game_state = test_all_game(millsGame, mode)
+
+# phase_one_state = test_phase_one(millsGame, int(mode))
 
 # print("Le nostre actions per il giocatore " + phase_one_state.to_move)
 # print(millsGame.actions(phase_one_state))
-phase_two_state = test_phase_two(millsGame, phase_one_state, int(mode))
-print(phase_two_state)
+# phase_two_state = test_phase_two(millsGame, phase_one_state, int(mode))
+# print(phase_two_state)
 
 # fase 3
-phase_three_state = test_phase_three(millsGame, phase_two_state, int(mode))
-print(phase_three_state)
+# phase_three_state = test_phase_three(millsGame, phase_two_state, int(mode))
+# print(phase_three_state)

@@ -101,7 +101,7 @@ def eval_fn_phase2(state):
         """
 
     # pesi per le sub eval
-    num_pieces_weight = 5
+    num_pieces_weight = 10
     num_tris_weight = 3
 
     player = state.to_move

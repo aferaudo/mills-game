@@ -2,7 +2,7 @@ from ..game_utils import *
 """Contiene l'euristica per la scelta della pedina da eliminare"""
 
 
-def delete_pieces_phase1(state):
+def delete_pieces_phase1(state, debug=False):
     """
     con questa funzione prendiamo uno stato e a partire da tutte le possibili pedine avversarie
     eliminabili scegliamo quella da eliminare più conveniente fase 1
@@ -66,10 +66,14 @@ def delete_pieces_phase1(state):
 
     deletable = sorted(deletable, key=lambda x: (-x[1], x[0]))
 
+    # TODO da rimuovere
+    if debug:
+        return deletable
+
     return deletable[0] if len(deletable) > 0 else state.moves
 
 
-def delete_pieces_phase2(state):
+def delete_pieces_phase2(state, debug=False):
     """
     con questa funzione prendiamo uno stato e a partire da tutte le possibili pedine avversarie
     eliminabili scegliamo quella da eliminare più conveniente fase 2
@@ -117,6 +121,7 @@ def delete_pieces_phase2(state):
         num_future_tris = check_future_tris(check_couples_list, state.board, opponent)
         value += num_future_tris * tris_weight
 
+        # valuto se la pedina dell'avversario muovendosi può fare tris
         if will_tris(state.board, piece, opponent):
             value += tris_weight
 
@@ -140,13 +145,17 @@ def delete_pieces_phase2(state):
 
     deletable = sorted(deletable, key=lambda x: (-x[1], x[0]))
 
+    # TODO da rimuovere
+    if debug:
+        return deletable
+
     return deletable[0] if len(deletable) > 0 else state.moves
 
 
-def delete_pieces_phase3(state):
+def delete_pieces_phase3(state, debug=False):
     """
     con questa funzione prendiamo uno stato e a partire da tutte le possibili pedine avversarie
-    eliminabili scegliamo quella da eliminare più conveniente fase 2
+    eliminabili scegliamo quella da eliminare più conveniente fase 3
     :param state:
     :return:
     """
@@ -189,5 +198,9 @@ def delete_pieces_phase3(state):
         deletable.append(tuple((piece, value)))
 
     deletable = sorted(deletable, key=lambda x: (-x[1], x[0]))
+
+    # TODO da rimuovere
+    if debug:
+        return deletable
 
     return deletable[0] if len(deletable) > 0 else state.moves
