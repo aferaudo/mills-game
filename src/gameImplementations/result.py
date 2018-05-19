@@ -25,6 +25,9 @@ def result(game, state, move):
     :param move:
     :return: new_state
     """
+    
+    if move is None:
+        return state  # Illegal move has no effect
     if move[1] not in state.moves:
         return state  # Illegal move has no effect
 
