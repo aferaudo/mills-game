@@ -10,7 +10,7 @@ import random
 
 depth = 10
 depth_opponent = depth
-time_depth = 100
+time_depth = 50
 cut_off = None
 eval_fn = eval_fn_smart
 eval_fn_opponent = eval_fn_opponent
@@ -301,7 +301,7 @@ def test_all_game(game, mode=2):
 
     game.display(current_state)
 
-    while not game.terminal_test(current_state) and iteration < 100:
+    while not game.terminal_test(current_state) and iteration < 50:
 
         phase = check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board, current_state.to_move)
 

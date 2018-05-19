@@ -20,13 +20,13 @@ def filter_phase1(state):
     """
 
     # TODO Controllare pesi (da fare alla fine)
-    adjacent_weight = 1
+    adjacent_weight = 3
     couple = 2
-    tris_weight = 7
-    block_tris = 6
-    double_game = 4
-    block_double_game = 5
+    tris_weight = 20
+    double_game = 8
+    block_double_game = 10
     block_piece_weight = 1.5
+    block_tris = 15
     mine_block_piece_weight = -1
 
     num_moves_to_return = 5
@@ -80,11 +80,13 @@ def filter_phase1(state):
         # valuto se blocco delle mie pedine (in questo caso la mossa sarà PENALIZZATA)
         mine_pieces_blocked = block_pieces(state, move, opponent)
         value += mine_pieces_blocked * mine_block_piece_weight
+
         # TODO Aggiungere il triplo gioco con strutture statiche (ALLA FINE)
         # aggiungo la mossa alle mosse da restituire
         moves.append(tuple((move, value)))
 
     moves = sorted(moves, key=lambda x: (-x[1], x[0]))
+    # print("Mosse calcolate in fase 1 " + str(moves))
     moves = moves[0:num_moves_to_return]
 
     moves_to_return = []
