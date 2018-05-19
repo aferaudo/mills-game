@@ -56,9 +56,9 @@ def get_deletable(state, move, phase):
     if move[2] != -1:
 
         if phase == 1:
-            deletables = delete_pieces_phase1(state, True)
+            deletables = delete_pieces_phase1(state, move, True)
         elif phase == 2:
-            deletables = delete_pieces_phase2(state, True)
+            deletables = delete_pieces_phase2(state, move, True)
         elif phase == 3:
             deletables = delete_pieces_phase3(state, True)
 

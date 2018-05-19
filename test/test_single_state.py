@@ -76,25 +76,36 @@ state_run_error = GameState(to_move='W',
                                    'B', 'W', 'B', 'W', 'B', 'W', 'O', 'O', 'B', 'O', 'O', 'O'],
                             moves=[18, 1, 8, 19, 21, 22, 23], w_board=8, b_board=9, w_no_board=0, b_no_board=0)
 
-temp_state = GameState(to_move='B', utility=0, board=['W', 'W', 'B', 'O', 'B', 'B', 'B', 'B', 'W', 'O', 'B', 'W', 'O', 'W', 'O', 'O', 'W', 'W', 'W', 'W', 'B', 'B', 'O', 'B'], moves=[3, 14, 12, 15, 9, 22], w_board=9, b_board=9, w_no_board=0, b_no_board=0)
+state_run_error_due = GameState(to_move='W', utility=0, board=['O', 'W', 'O', 'B', 'W', 'B', 'O', 'B', 'O', 'B', 'B', 'W', 'W', 'W', 'B', 'W', 'W', 'O', 'W', 'W', 'B', 'O', 'B', 'B'], moves=[0, 2, 6, 8, 17, 21], w_board=9, b_board=9, w_no_board=0, b_no_board=0)
 
+temp_state = GameState(to_move='B',
+                       utility=0,
+                       board=['W', 'W', 'B', 'O', 'B', 'B', 'B', 'B', 'W', 'O', 'B', 'W',
+                              'O', 'W', 'O', 'O', 'W', 'W', 'W', 'W', 'B', 'B', 'O', 'B'],
+                       moves=[3, 14, 12, 15, 9, 22], w_board=9, b_board=9, w_no_board=0, b_no_board=0)
+
+temp_two_state = GameState(to_move='W',
+                           utility=0,
+                           board=['B', 'B', 'W', 'O', 'W', 'W', 'W', 'W', 'B', 'O', 'W', 'B',
+                                  'O', 'B', 'O', 'O', 'B', 'B', 'B', 'B', 'W', 'W', 'O', 'W'],
+                           moves=[3, 14, 12, 15, 9, 22], w_board=9, b_board=9, w_no_board=0, b_no_board=0)
 
 # millsGame.display(state_phase_three_start)
 # print("State = " + str(state_phase_three_start))
 # moves = millsGame.actions(state_phase_three_start)
 # print("Moves = " + str(moves))
 
-millsGame.display(temp_state)
-print("State = " + str(temp_state))
-moves = millsGame.actions(temp_state)
+millsGame.display(state_run_error_due)
+print("State = " + str(state_run_error_due))
+moves = millsGame.actions(state_run_error_due)
 print("Moves = " + str(moves))
 
-depth = 11
+depth = 3
 
-next_move = alphabeta_cutoff_search(temp_state, millsGame, depth, None, eval_fn_smart)
+next_move = alphabeta_cutoff_search(state_run_error_due, millsGame, depth, None, eval_fn_smart)
 print(next_move)
 
-next_state = millsGame.result(temp_state, next_move)
+next_state = millsGame.result(state_run_error_due, next_move)
 millsGame.display(next_state)
 print(next_state)
 
@@ -116,8 +127,6 @@ print(next_state)
 # next_state = millsGame.result(state_phase_three_test, move)
 # millsGame.display(next_state)
 # print("stato = " + str(next_state))
-
-
 
 
 # print(check_couples_phase_two(state_phase_two_duoble_game, 18, 10, 'W'))

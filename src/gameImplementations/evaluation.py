@@ -22,39 +22,43 @@ def eval_fn_stupid(state):
         return value + victory
 
 
-def eval_fn_num_pieces(state, weight):
+def eval_fn_num_pieces(state, starter_player, weight):
     """
     Valuta la differenza di pedine tra i due giocatori
     :param state:
+    :param starter_player:
+    :param weight:
     :return:
     """
 
     w_pieces = state.w_board + state.w_no_board
     b_pieces = state.b_board + state.b_no_board
-    if state.to_move == 'W':
+    if starter_player == 'W':
         return (w_pieces - b_pieces) * weight
     else:
         return (b_pieces - w_pieces) * weight
 
 
-def eval_fn_num_tris(state, weight):
+def eval_fn_num_tris(state, starter_player, weight):
     """
     Valuta la differenza tra il numero di tris dei due giocatori
     :param state:
+    :param starter_player:
     :param weight:
     :return:
     """
     all_tris = all_tris_on_board(state)
-    if state.to_move == 'W':
+    if starter_player == 'W':
         return (len(all_tris['W']) - len(all_tris['B'])) * weight
     else:
         return (len(all_tris['B']) - len(all_tris['W'])) * weight
 
 
-def eval_fn_num_adjacents(state, weight):
+def eval_fn_num_adjacents(state, starter_player, weight):
     """
     Valuta la differenza tra il numero di adiacenti dei giocatori
     :param state:
+    :param starter_player:
     :param weight:
     :return:
     """
@@ -63,13 +67,13 @@ def eval_fn_num_adjacents(state, weight):
     adjacents_w = count_all_adjacents_player(board, all_pieces['W'])
     adjacents_b = count_all_adjacents_player(board, all_pieces['B'])
 
-    if state.to_move == 'W':
+    if starter_player == 'W':
         return (adjacents_w - adjacents_b) * weight
     else:
         return (adjacents_b - adjacents_w) * weight
 
 
-def eval_fn_smart(state):
+def eval_fn_smart(state, starter_player):
     """
     È la nostra eval generica che in base alla fase sceglie quale funzione usare per valutare lo stato
     :param state:
@@ -83,14 +87,14 @@ def eval_fn_smart(state):
     victory = state.utility
 
     if phase == 1:
-        return eval_fn_phase1(state) + victory
+        return eval_fn_phase1(state, starter_player) + victory
     if phase == 2:
-        return eval_fn_phase2(state) + victory
+        return eval_fn_phase2(state, starter_player) + victory
     if phase == 3:
-        return eval_fn_phase3(state) + victory
+        return eval_fn_phase3(state, starter_player) + victory
 
 
-def eval_fn_phase1(state):
+def eval_fn_phase1(state, starter_player):
     """
     Restituisce una valutazione sulla vittoria secondo la board corrente (State)
     :param state:
@@ -107,20 +111,20 @@ def eval_fn_phase1(state):
     evaluation = 0
 
     # Stiamo calcolando la differenza tra le pedine dei giocatori
-    evaluation += eval_fn_num_pieces(state, num_pieces_weight)
+    evaluation += eval_fn_num_pieces(state, starter_player, num_pieces_weight)
 
     # calcoliamo la differenza tra gli adiacenti dei giocatori
-    # evaluation += eval_fn_num_adjacents(state, num_adjacents_weight)
+    # evaluation += eval_fn_num_adjacents(state, starter_player, num_adjacents_weight)
 
     # calcoliamo la differenza tra il numero di tris dei giocatori
-    evaluation += eval_fn_num_tris(state, num_tris_weight)
+    evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
     #print(evaluation)
 
     return evaluation
 
 
-def eval_fn_phase2(state):
+def eval_fn_phase2(state, starter_player):
     """
         Restituisce una valutazione sulla vittoria secondo la board corrente (State)
         :param state:
@@ -137,20 +141,20 @@ def eval_fn_phase2(state):
     evaluation = 0
 
     # Stiamo calcolando la differenza tra le pedine dei giocatori
-    evaluation += eval_fn_num_pieces(state, num_pieces_weight)
+    evaluation += eval_fn_num_pieces(state, starter_player, num_pieces_weight)
 
     # calcoliamo la differenza tra gli adiacenti dei giocatori
-    # evaluation += eval_fn_num_adjacents(state, num_adjacents_weight)
+    # evaluation += eval_fn_num_adjacents(state, starter_player, num_adjacents_weight)
 
     # calcoliamo la differenza tra il numero di tris dei giocatori
-    evaluation += eval_fn_num_tris(state, num_tris_weight)
+    evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
     # print(evaluation)
 
     return evaluation
 
 
-def eval_fn_phase3(state):
+def eval_fn_phase3(state, starter_player):
     """
         Restituisce una valutazione sulla vittoria secondo la board corrente (State)
         :param state:
@@ -167,20 +171,20 @@ def eval_fn_phase3(state):
     evaluation = 0
 
     # Stiamo calcolando la differenza tra le pedine dei giocatori
-    evaluation += eval_fn_num_pieces(state, num_pieces_weight)
+    evaluation += eval_fn_num_pieces(state, starter_player, num_pieces_weight)
 
     # calcoliamo la differenza tra gli adiacenti dei giocatori
-    # evaluation += eval_fn_num_adjacents(state, num_adjacents_weight)
+    # evaluation += eval_fn_num_adjacents(state, starter_player, num_adjacents_weight)
 
     # calcoliamo la differenza tra il numero di tris dei giocatori
-    evaluation += eval_fn_num_tris(state, num_tris_weight)
+    evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
     # print(evaluation)
 
     return evaluation
 
 
-def eval_fn_opponent(state):
+def eval_fn_opponent(state, starter_player):
     """
     È la nostra eval generica che in base alla fase sceglie quale funzione usare per valutare lo stato
     :param state:
@@ -193,14 +197,14 @@ def eval_fn_opponent(state):
     victory = state.utility
 
     if phase == 1:
-        return eval_fn_phase1_opponent(state) + victory
+        return eval_fn_phase1_opponent(state, starter_player) + victory
     if phase == 2:
-        return eval_fn_phase2_opponent(state) + victory
+        return eval_fn_phase2_opponent(state, starter_player) + victory
     if phase == 3:
-        return eval_fn_phase3_opponent(state) + victory
+        return eval_fn_phase3_opponent(state, starter_player) + victory
 
 
-def eval_fn_phase1_opponent(state):
+def eval_fn_phase1_opponent(state, starter_player):
     """
     Restituisce una valutazione sulla vittoria secondo la board corrente (State)
     :param state:
@@ -217,17 +221,17 @@ def eval_fn_phase1_opponent(state):
     evaluation = 0
 
     # Stiamo calcolando la differenza tra le pedine dei giocatori
-    evaluation += eval_fn_num_pieces(state, num_pieces_weight)
+    evaluation += eval_fn_num_pieces(state, starter_player, num_pieces_weight)
 
     # calcoliamo la differenza tra il numero di tris dei giocatori
-    evaluation += eval_fn_num_tris(state, num_tris_weight)
+    evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
     #print(evaluation)
 
     return evaluation
 
 
-def eval_fn_phase2_opponent(state):
+def eval_fn_phase2_opponent(state, starter_player):
     """
         Restituisce una valutazione sulla vittoria secondo la board corrente (State)
         :param state:
@@ -244,17 +248,17 @@ def eval_fn_phase2_opponent(state):
     evaluation = 0
 
     # Stiamo calcolando la differenza tra le pedine dei giocatori
-    evaluation += eval_fn_num_pieces(state, num_pieces_weight)
+    evaluation += eval_fn_num_pieces(state, starter_player, num_pieces_weight)
 
     # calcoliamo la differenza tra il numero di tris dei giocatori
-    evaluation += eval_fn_num_tris(state, num_tris_weight)
+    evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
     # print(evaluation)
 
     return evaluation
 
 
-def eval_fn_phase3_opponent(state):
+def eval_fn_phase3_opponent(state, starter_player):
     """
         Restituisce una valutazione sulla vittoria secondo la board corrente (State)
         :param state:
@@ -271,10 +275,10 @@ def eval_fn_phase3_opponent(state):
     evaluation = 0
 
     # Stiamo calcolando la differenza tra le pedine dei giocatori
-    evaluation += eval_fn_num_pieces(state, num_pieces_weight)
+    evaluation += eval_fn_num_pieces(state, starter_player, num_pieces_weight)
 
     # calcoliamo la differenza tra il numero di tris dei giocatori
-    evaluation += eval_fn_num_tris(state, num_tris_weight)
+    evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
     # print(evaluation)
 
