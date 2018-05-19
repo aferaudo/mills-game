@@ -25,3 +25,8 @@ class MySocket:
     def safely_close(self):
         self.sock.shutdown(socket.SHUT_RDWR)
         self.sock.close()
+
+    def receive(self):
+        data = self.sock.recv(1024).decode()
+        return data
+
