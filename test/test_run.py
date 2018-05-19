@@ -8,11 +8,12 @@ from src.gameImplementations.evaluation import *
 import time
 import random
 
-depth = 10
-time_depth = 0.5
+depth = 9
+depth_opponent = depth
+time_depth = 100
 cut_off = None
 eval_fn = eval_fn_smart
-eval_fn_opponent = eval_fn_stupid
+eval_fn_opponent = eval_fn_opponent
 
 
 def get_random(extracted):
