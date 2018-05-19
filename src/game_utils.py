@@ -1,4 +1,5 @@
 
+
 def locations():
     """
     restituisce una lista contenente tutte le posizioni adiacenti alle diverse posizioni possibili sulla board
@@ -547,3 +548,48 @@ def will_tris(board, piece, player):
     for pos in move_adjacent:
         if check_tris(board, piece, pos, player):
             return True
+
+
+def all_pieces_on_board_for_each_player(state):
+    """
+    Metodo che restituisce tutte le pedine presenti nella board, inserendo in un dictionary le pedine di due giocatori
+    nella struttura {W: pieces, B: pieces}
+    :param state:
+    :return:
+    """
+    pieces_w = []
+    pieces_b = []
+    for index, value in enumerate(state.board):
+        if value == 'W':
+            pieces_w.append(index)
+        if value == 'B':
+            pieces_b.append(index)
+
+    return {
+        'W': pieces_w,
+        'B': pieces_b
+    }
+
+
+def count_all_adjacents_player(board, pieces_player):
+    """
+    Metodo prende in ingresso tutte le pedine di un giocatore e restituisce il numero di adjacenti vuoti totale
+    :param board: 
+    :param pieces_player: 
+    :return: 
+    """
+    count_free_adjacent = 0
+    for piece in pieces_player:
+        adjacent = adjacent_locations(piece)
+        for pos in adjacent:
+            if board[pos] == 'O':
+                count_free_adjacent += 1
+
+    return count_free_adjacent
+
+
+def check_delete_win(game, state, move):
+
+    state_copy = state
+    new_state = game.result(state_copy, move)
+    return abs(new_state.utility)

@@ -57,8 +57,18 @@ state_phase_three_start = GameState(to_move='B',
                                     moves=[0, 2, 8, 12, 10, 14, 6, 11, 22, 9, 21, 13, 7], w_board=8,
                                     b_board=3, w_no_board=0, b_no_board=0)
 
-state_phase_three_test = GameState(to_move='B', utility=0, board=['O', 'W', 'O', 'W', 'O', 'O', 'O', 'O', 'O', 'O', 'W', 'W', 'O', 'O', 'B', 'B', 'W', 'W', 'O', 'O', 'W', 'O', 'O', 'B'], moves=[0, 4, 8, 12, 18, 5, 6, 2, 22, 9, 21, 13, 7, 19], w_board=7, b_board=3, w_no_board=0, b_no_board=0)
+state_phase_three_test = GameState(to_move='B',
+                                   utility=0,
+                                   board=['O', 'W', 'O', 'W', 'O', 'O', 'O', 'O', 'O', 'O', 'W', 'W',
+                                          'O', 'O', 'B', 'B', 'W', 'W', 'O', 'O', 'W', 'O', 'O', 'B'],
+                                   moves=[0, 4, 8, 12, 18, 5, 6, 2, 22, 9, 21, 13, 7, 19], w_board=7, b_board=3,
+                                   w_no_board=0, b_no_board=0)
 
+state_delete_for_win = GameState(to_move='W',
+                                 utility=0,
+                                 board=['B', 'B', 'W', 'W', 'W', 'O', 'B', 'W', 'B', 'B', 'B', 'W',
+                                        'O', 'W', 'O', 'O', 'O', 'O', 'B', 'W', 'O', 'W', 'B', 'W'],
+                                 moves=[12, 14, 15, 16, 17, 20, 5], w_board=9, b_board=8, w_no_board=0, b_no_board=0)
 
 
 # millsGame.display(state_phase_three_start)
@@ -66,18 +76,22 @@ state_phase_three_test = GameState(to_move='B', utility=0, board=['O', 'W', 'O',
 # moves = millsGame.actions(state_phase_three_start)
 # print("Moves = " + str(moves))
 
-millsGame.display(state_phase_three_test)
-print("State = " + str(state_phase_three_test))
-moves = millsGame.actions(state_phase_three_test)
+millsGame.display(state_delete_for_win)
+print("State = " + str(state_delete_for_win))
+moves = millsGame.actions(state_delete_for_win)
 print("Moves = " + str(moves))
 
-depth = 8
-move = alphabeta_cutoff_search(state_phase_three_test, millsGame, depth, None, eval_fn_stupid)
-print("AlfaBeta move = " + str(move))
-
-next_state = millsGame.result(state_phase_three_test, move)
-millsGame.display(next_state)
-print("stato = " + str(next_state))
+# print("State = " + str(state_phase_three_test))
+# moves = millsGame.actions(state_phase_three_test)
+# print("Moves = " + str(moves))
+#
+# depth = 8
+# move = alphabeta_cutoff_search(state_phase_three_test, millsGame, depth, None, eval_fn_stupid)
+# print("AlfaBeta move = " + str(move))
+#
+# next_state = millsGame.result(state_phase_three_test, move)
+# millsGame.display(next_state)
+# print("stato = " + str(next_state))
 
 
 

@@ -60,8 +60,18 @@ def result(game, state, move):
         else:
             new_b_board = state.b_board - 1
 
+    temp_state = GameState(to_move=state.to_move,
+                           utility=0,
+                           board=board,
+                           moves=moves,
+                           w_board=new_w_board,
+                           b_board=new_b_board,
+                           w_no_board=w_no_board,
+                           b_no_board=b_no_board
+                           )
+
     return GameState(to_move=next_player,
-                     utility=compute_utility(state, w_no_board, b_no_board, new_w_board, new_b_board),
+                     utility=compute_utility(temp_state, w_no_board, b_no_board, new_w_board, new_b_board),
                      board=board,
                      moves=moves,
                      w_board=new_w_board,
@@ -76,17 +86,10 @@ def compute_utility(state, w_no_board, b_no_board, w_board, b_board):
     É provvisoria solo per la fase 1
     """
     victory_value = 1000
-    if check_phase(w_no_board, b_no_board, w_board, b_board, state.to_move) == 1:
-        # TODO Why?
-        if w_no_board == 0 and b_no_board == 0:
-            return victory_value if state.to_move == 'W' else -victory_value
-        else:
-            return 0
-
+    movable = can_move(state, 'B')
+    if state.to_move == 'W' and (b_board == 2 or len(movable) == 0):
+        return victory_value
+    elif state.to_move == 'B' and (w_board == 2 or len(can_move(state, 'W')) == 0):
+        return -victory_value
     else:
-        if state.to_move == 'W' and (b_board == 2 or len(can_move(state, 'B')) == 0):
-            return victory_value
-        elif state.to_move == 'B' and (w_board == 2 or len(can_move(state, 'W')) == 0):
-            return -victory_value
-        else:
-            return 0
+        return 0
