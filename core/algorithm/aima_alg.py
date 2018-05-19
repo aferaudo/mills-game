@@ -1,5 +1,6 @@
 
 from ..utilis.aima_utils import argmax
+import time
 
 infinity = float('inf')
 
@@ -81,11 +82,24 @@ def alphabeta_search(state, game):
 # Alpha Beta Cutoff Search
 
 
-def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
+def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None, time_depth=50):
     """Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function."""
 
     player = game.to_move(state)
+
+    start_time = time.time()
+
+    def cut_off_timer(state, depth):
+        """
+        La nostra cutoff_test che ferma l'algoritmo dopo che sono trascorsi time_depth secondi
+        :param state:
+        :param depth:
+        :return:
+        """
+        end_time = time.time() - start_time
+        if depth > d or game.terminal_test(state) or end_time > time_depth:
+            return True
 
     # Functions used by alphabeta
     def max_value(state, alpha, beta, depth):
@@ -114,9 +128,7 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
 
     # Body of alphabeta_cutoff_search starts here:
     # The default test cuts off at depth d or at a terminal state
-    cutoff_test = (cutoff_test or
-                   (lambda state, depth: depth > d or
-                    game.terminal_test(state)))
+    cutoff_test = (cutoff_test or cut_off_timer)
     eval_fn = eval_fn or (lambda state: game.utility(state, player))
     best_score = -infinity
     beta = infinity
