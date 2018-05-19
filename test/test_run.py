@@ -35,10 +35,10 @@ def get_random(extracted):
 def get_random_action(actions):
     """
     Restituisce un numero random evitando le collisioni
-    :param extracted:
+    :param actions:
     :return random:
     """
-    return random.randint(0, len(actions))
+    return random.randint(0, len(actions)-1)
 
 
 def print_current_move(game, old_state, new_state, move, iteration='', deletables=None):
@@ -132,7 +132,7 @@ def test_phase_one(game, mode=1):
 
         print("--- AI vs Human ---\n\n")
         while check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
-                          current_state.b_board,current_state.to_move ) == 1:
+                          current_state.b_board, current_state.to_move) == 1:
             if current_state.to_move == 'W':
                 start_time = time.time()
                 next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
@@ -142,7 +142,8 @@ def test_phase_one(game, mode=1):
             else:
                 next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
                 if check_tris(current_state.board, -1, next_move, 'B'):
-                    delete_pos = int(input("Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
+                    delete_pos = int(input(
+                        "Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
                 else:
                     delete_pos = -1
                 next_move = tuple((-1, next_move, delete_pos))
@@ -165,7 +166,8 @@ def test_phase_one(game, mode=1):
             else:
                 next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
                 if check_tris(current_state.board, -1, next_move, 'B'):
-                    delete_pos = int(input("Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
+                    delete_pos = int(input(
+                        "Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
                 else:
                     delete_pos = -1
                 next_move = tuple((-1, next_move, delete_pos))
@@ -243,7 +245,8 @@ def test_phase_three(game, state, mode=1):
         current_state = state
         iteration = 1
 
-        while compute_utility(current_state, current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 0:
+        while compute_utility(current_state, current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                              current_state.b_board) == 0:
             if current_state.to_move == 'W':
                 start_time = time.time()
                 next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
@@ -270,7 +273,8 @@ def test_phase_three(game, state, mode=1):
         iteration = 1
         print(check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                           current_state.b_board, current_state.to_move))
-        while compute_utility(current_state, current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board) == 0:
+        while compute_utility(current_state, current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                              current_state.b_board) == 0:
             start_time = time.time()
             if current_state.to_move == 'W':
                 next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
@@ -303,13 +307,40 @@ def test_all_game(game, mode=2):
 
     while not game.terminal_test(current_state) and iteration < 50:
 
-        phase = check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board, current_state.b_board, current_state.to_move)
+        phase = check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                            current_state.b_board, current_state.to_move)
 
         if phase != old_phase:
             old_phase = phase
             print("\n\n**************  FASE " + str(phase) + "  **************", end='\n\n')
 
-        if mode == 2:
+        if mode == 1:
+            # AI vs Random Advanced (Select random move from filtered actions)
+
+            if current_state.to_move == 'W':
+                start_time = time.time()
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+            else:
+                start_time = time.time()
+                actions = game.actions(current_state)
+                next_move_index = get_random_action(actions)
+                next_move = actions[next_move_index]
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+
+            deletables = get_deletable(current_state, next_move, phase)
+            old_state = current_state
+            current_state = game.result(old_state, next_move)
+            print_current_move(game, old_state, current_state, next_move, iteration, deletables)
+            iteration += 1
+
+            print("Siamo ancora in fase " + str(phase))
+
+        elif mode == 2:
+            # AI vs AI
+
             start_time = time.time()
             if current_state.to_move == 'W':
                 next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
@@ -326,6 +357,70 @@ def test_all_game(game, mode=2):
 
             print("Siamo ancora in fase " + str(phase))
 
+        elif mode == 3:
+            # AI vs Human
+
+            if current_state.to_move == 'W':
+                start_time = time.time()
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+            else:
+                start_time = time.time()
+                old_pos = -1
+                if phase != 1:
+                    old_pos = int(input("Quale pedina vuoi muovere?\n"))
+                    next_move = int(input("Dove vuoi metterla \n"))
+                else:
+                    next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
+                if check_tris(current_state.board, -1, next_move, 'B'):
+                    delete_pos = int(input(
+                        "Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
+                else:
+                    delete_pos = -1
+                next_move = tuple((old_pos, next_move, delete_pos))
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+
+            old_state = current_state
+            current_state = game.result(old_state, next_move)
+            print_current_move(game, old_state, current_state, next_move, iteration, [])
+            iteration += 1
+
+            print("Siamo ancora in fase " + str(phase))
+
+        elif mode == 4:
+            # Human vs AI
+
+            if current_state.to_move == 'W':
+                start_time = time.time()
+                old_pos = -1
+                if phase != 1:
+                    old_pos = int(input("Quale pedina vuoi muovere?\n"))
+                    next_move = int(input("Dove vuoi metterla \n"))
+                else:
+                    next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
+                if check_tris(current_state.board, -1, next_move, 'W'):
+                    delete_pos = int(input(
+                        "Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
+                else:
+                    delete_pos = -1
+                next_move = tuple((old_pos, next_move, delete_pos))
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+            else:
+                start_time = time.time()
+                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+                end_time = time.time() - start_time
+                print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
+
+            old_state = current_state
+            current_state = game.result(old_state, next_move)
+            print_current_move(game, old_state, current_state, next_move, iteration, [])
+            iteration += 1
+
+            print("Siamo ancora in fase " + str(phase))
+
     return current_state
 
 
@@ -333,15 +428,24 @@ def test_all_game(game, mode=2):
 
 
 millsGame = MillsGame()
-mode = 2
-# mode = input("Scegli in quale modalità giocare: \n"
-#              "- mode = 1 -> AI vs Random \n"
-#              "- mode = 2 -> AI vs AI \n"
-#              "- mode = 3 -> AI vs Human \n"
-#              "- mode = 4 -> Human vs AI\n"
-#              )
+# mode = 2
+mode = int(input("Scegli in quale modalità giocare: \n"
+                 "- mode = 1 -> AI vs Random Advanced (Select random move from filtered actions) \n"
+                 "- mode = 2 -> AI vs AI \n"
+                 "- mode = 3 -> AI vs Human \n"
+                 "- mode = 4 -> Human vs AI\n"
+                 ))
 
 game_state = test_all_game(millsGame, mode)
+
+if game_state.b_board == 2:
+    print("\n\n******* W HA VINTO *******\n\n")
+elif game_state.w_board == 2:
+    print("\n\n******* B HA VINTO *******\n\n")
+else:
+    print("\n\n******* PAREGGIO *******\n\n")
+
+print("Stato finale = " + str(game_state))
 
 # phase_one_state = test_phase_one(millsGame, int(mode))
 
