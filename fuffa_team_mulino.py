@@ -5,9 +5,6 @@ from src.gameImplementations.evaluation import *
 
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
-depth = 12
-depth_opponent = depth
-time_depth = 58
 cut_off = None
 eval_fn = eval_fn_smart
 eval_fn_opponent = eval_fn_opponent
@@ -52,6 +49,10 @@ def string_to_state(stringa, our_color):
 
 def main(argv):
     # prendiamo in ingresso da terminale il colore del giocatore
+    depth = 12
+    depth_opponent = depth
+    time_depth = 58
+
     colored = False
     our_color = None
     try:
@@ -86,14 +87,14 @@ def main(argv):
         elif opt == '-t':
             try:
                 time_depth = int(arg)
-            except:
+            except ValueError:
                 print("time argument must be an int\nusage: fuffa_team_mulino.py -w (player white) "
                       "-b (player black) -h (see option)')")
                 sys.exit(1)
         elif opt == '-d':
             try:
                 depth = int(arg)
-            except:
+            except ValueError:
                 print("time argument must be an int\nusage: fuffa_team_mulino.py -w (player white) "
                       "-b (player black) -h (see option)')")
                 sys.exit(1)
