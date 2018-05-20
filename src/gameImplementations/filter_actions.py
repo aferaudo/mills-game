@@ -28,7 +28,7 @@ def filter_phase1(state):
     block_tris = 15
     mine_block_piece_weight = -1
 
-    num_moves_to_return = 5
+    num_moves_to_return = 7
 
     player = state.to_move
     opponent = "B" if player == "W" else "W"
@@ -115,7 +115,7 @@ def filter_phase2(state):
     player_double_game = 5
     opponent_tris_will_unlock = -5
 
-    num_moves_to_return = 5
+    num_moves_to_return = 4
 
     player = state.to_move
     opponent = "B" if player == "W" else "W"

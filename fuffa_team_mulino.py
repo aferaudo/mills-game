@@ -133,6 +133,12 @@ def main(argv):
         print(current_state)
 
     while not mills_game.terminal_test(current_state):
+        phase = check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
+                            current_state.b_board, current_state.to_move)
+        if phase == 1:
+            depth = 10
+        else:
+            depth = 11
         next_move = alphabeta_cutoff_search(current_state, mills_game, depth, cut_off, eval_fn, time_depth)
         print("Scrivo la mia mossa: " + str(next_move))
         python_socket.my_send(str(next_move).encode("UTF-8"))

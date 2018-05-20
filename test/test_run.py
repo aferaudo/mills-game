@@ -9,7 +9,7 @@ from src.Logger import Logger
 import time
 import random
 
-depth = 8
+depth = 10
 depth_opponent = depth
 time_depth = 58
 cut_off = None
@@ -303,6 +303,8 @@ def test_all_game(game, mode=2, starter_state=None):
     iteration = 1
     old_phase = 0
 
+    depth = 10
+
     current_state = starter_state or game.initial
 
     game.display(current_state)
@@ -315,6 +317,11 @@ def test_all_game(game, mode=2, starter_state=None):
 
         phase = check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                             current_state.b_board, current_state.to_move)
+
+        if phase == 1:
+            depth = 10
+        else:
+            depth = 11
 
         if phase != old_phase:
             old_phase = phase
