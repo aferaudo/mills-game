@@ -2,6 +2,7 @@ import sys, getopt
 from src.communication.mysocket import MySocket
 from core.algorithm.aima_alg import *
 from src.gameImplementations.evaluation import *
+import time
 
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
@@ -141,7 +142,10 @@ def main(argv):
             depth = 13
         else:
             depth = 11
+        start_time = time.time()
         next_move = alphabeta_cutoff_search(current_state, mills_game, depth, cut_off, eval_fn, time_depth)
+        end_time = time.time()-start_time
+        print("******* TEMPO IMPIEGATO = %s seconds *******" % end_time)
         print("Scrivo la mia mossa: " + str(next_move))
         python_socket.my_send(str(next_move).encode("UTF-8"))
         print("Mossa inviata!")
