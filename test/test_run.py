@@ -305,7 +305,7 @@ def test_all_game(game, mode=2):
 
     game.display(current_state)
 
-    while not game.terminal_test(current_state) and iteration < 50:
+    while not game.terminal_test(current_state) and iteration < 100:
 
         phase = check_phase(current_state.w_no_board, current_state.b_no_board, current_state.w_board,
                             current_state.b_board, current_state.to_move)
