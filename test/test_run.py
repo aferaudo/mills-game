@@ -4,6 +4,7 @@ from src.game_utils import *
 from src.gameImplementations.result import compute_utility
 from src.gameImplementations.delete_strategy import *
 from src.gameImplementations.evaluation import *
+from src.Logger import Logger
 
 import time
 import random
@@ -295,13 +296,14 @@ def test_phase_three(game, state, mode=1):
     return current_state
 
 
-def test_all_game(game, mode=2):
+def test_all_game(game, mode=2, starter_state=None):
     print("\n******************************************************")
     print("**************  NINE MEN'S MORRIS GAME  **************")
     print("******************************************************", end='\n\n')
     iteration = 1
     old_phase = 0
-    current_state = game.initial
+
+    current_state = starter_state or game.initial
 
     game.display(current_state)
 
@@ -428,6 +430,7 @@ def test_all_game(game, mode=2):
 
 
 millsGame = MillsGame()
+logger = Logger()
 # mode = 2
 mode = int(input("Scegli in quale modalità giocare: \n"
                  "- mode = 1 -> AI vs Random Advanced (Select random move from filtered actions) \n"
@@ -436,7 +439,14 @@ mode = int(input("Scegli in quale modalità giocare: \n"
                  "- mode = 4 -> Human vs AI\n"
                  ))
 
-game_state = test_all_game(millsGame, mode)
+use_start_state = input("Vuoi partire da una vecchia partita? (s/n)\n")
+if use_start_state.lower() == 's':
+    starter_state_name = input("Inserisci il nome del file (comprensivo di estensione) \n")
+    start_state = logger.read_state(starter_state_name)
+else:
+    start_state = None
+
+game_state = test_all_game(millsGame, mode, start_state)
 
 if game_state.b_board == 2:
     print("\n\n******* W HA VINTO *******\n\n")
