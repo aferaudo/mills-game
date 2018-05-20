@@ -19,7 +19,6 @@ def filter_phase1(state):
     :return:
     """
 
-    # TODO Controllare pesi (da fare alla fine)
     adjacent_weight = 3
     couple = 2
     tris_weight = 20
@@ -81,7 +80,6 @@ def filter_phase1(state):
         mine_pieces_blocked = block_pieces(state, move, opponent)
         value += mine_pieces_blocked * mine_block_piece_weight
 
-        # TODO Aggiungere il triplo gioco con strutture statiche (ALLA FINE)
         # aggiungo la mossa alle mosse da restituire
         moves.append(tuple((move, value)))
 
@@ -111,7 +109,6 @@ def filter_phase2(state):
     """
     moves = []
 
-    # TODO Controllare pesi (da fare alla fine)
     player_will_tris = 15
     player_tris_trick = 7
     player_couple = 2
@@ -184,7 +181,6 @@ def filter_phase3(state):
     """
     moves = []
 
-    # TODO Controllare pesi (da fare alla fine)
     player_will_tris = 20
     player_couple_game = 2
     opponent_will_tris = 25

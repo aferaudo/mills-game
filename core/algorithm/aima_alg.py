@@ -82,18 +82,13 @@ def alphabeta_search(state, game):
 # Alpha Beta Cutoff Search
 
 
-def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None, time_depth=50, logger=None):
+def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None, time_depth=50):
     """Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function."""
-
-    # TODO togliere i log
 
     player = game.to_move(state)
 
     start_time = time.time()
-
-    if logger is not None:
-        logger.init_log_file('alpha_beta')
 
     def cut_off_timer(state, depth):
         """
@@ -109,24 +104,9 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None, ti
     # Functions used by alphabeta
     def max_value(state, alpha, beta, depth):
         if cutoff_test(state, depth):
-            eval_value = eval_fn(state, player)
-            to_print = "Eval value = " + str(eval_value) + "\nStato della eval = " + str(state) \
-                       + "\n----------------------\n\n"
-            if logger is not None:
-                logger.info_message(to_print)
-            return eval_value
+            return eval_fn(state, player)
         v = -infinity
         for a in game.actions(state):
-            to_print = "Giocatore = " + state.to_move + "\nProfondità esplorata = " + str(depth) \
-                       + "\nMossa corrente = " + str(a) + "\nState = " + str(state) + "\n----------------------\n\n"
-            if logger is not None:
-                logger.info_message(to_print)
-
-            # print("Giocatore = " + state.to_move)
-            # print("Profondità esplorata = " + str(depth))
-            # print("Mossa corrente = " + str(a))
-            # print("State = " + str(state))
-            # print("----------------------\n\n")
             v = max(v, min_value(game.result(state, a),
                                  alpha, beta, depth + 1))
             if v >= beta:
@@ -136,27 +116,9 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None, ti
 
     def min_value(state, alpha, beta, depth):
         if cutoff_test(state, depth):
-            eval_value = eval_fn(state, player)
-
-            to_print = "Eval value = " + str(eval_value) + "\nStato della eval = " + str(state) \
-                       + "\n----------------------\n\n"
-            if logger is not None:
-                logger.info_message(to_print)
-            # print("Eval value = " + str(eval_value))
-            # print("----------------------\n\n")
-
-            return eval_value
+            return eval_fn(state, player)
         v = infinity
         for a in game.actions(state):
-            to_print = "Giocatore = " + state.to_move + "\nProfondità esplorata = " + str(depth) \
-                       + "\nMossa corrente = " + str(a) + "\nState = " + str(state) + "\n----------------------\n\n"
-            if logger is not None:
-                logger.info_message(to_print)
-            # print("Giocatore = " + state.to_move)
-            # print("Profondità esplorata = " + str(depth))
-            # print("Mossa corrente = " + str(a))
-            # print("State = " + str(state))
-            # print("----------------------\n\n")
             v = min(v, max_value(game.result(state, a),
                                  alpha, beta, depth + 1))
             if v <= alpha:
@@ -172,21 +134,119 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None, ti
     beta = infinity
     best_action = None
     for a in game.actions(state):
-        to_print = "Giocatore = " + state.to_move + "\nProfondità esplorata = " + str(0) \
-                   + "\nMossa corrente = " + str(a) + "\nState = " + str(state) + "\n----------------------\n\n"
-        if logger is not None:
-            logger.info_message(to_print)
-
-        # print("Giocatore = " + state.to_move)
-        # print("Profondità esplorata = " + str(0))
-        # print("Mossa corrente = " + str(a))
-        # print("State = " + str(state))
-        # print("----------------------\n\n")
         v = min_value(game.result(state, a), best_score, beta, 1)
         if v > best_score:
             best_score = v
             best_action = a
-
-    if logger is not None:
-        logger.info_message("******* BEST ACTION = " + str(best_action) + " *******\n\n")
     return best_action
+
+
+# def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None, time_depth=50, logger=None):
+#     """Search game to determine best action; use alpha-beta pruning.
+#     This version cuts off search and uses an evaluation function."""
+#
+#
+#     player = game.to_move(state)
+#
+#     start_time = time.time()
+#
+#     if logger is not None:
+#         logger.init_log_file('alpha_beta')
+#
+#     def cut_off_timer(state, depth):
+#         """
+#         La nostra cutoff_test che ferma l'algoritmo dopo che sono trascorsi time_depth secondi
+#         :param state:
+#         :param depth:
+#         :return:
+#         """
+#         end_time = time.time() - start_time
+#         if depth > d or game.terminal_test(state) or end_time > time_depth:
+#             return True
+#
+#     # Functions used by alphabeta
+#     def max_value(state, alpha, beta, depth):
+#         if cutoff_test(state, depth):
+#             eval_value = eval_fn(state, player)
+#             to_print = "Eval value = " + str(eval_value) + "\nStato della eval = " + str(state) \
+#                        + "\n----------------------\n\n"
+#             # if logger is not None:
+#             #     logger.info_message(to_print)
+#             return eval_value
+#         v = -infinity
+#         for a in game.actions(state):
+#             # to_print = "Giocatore = " + state.to_move + "\nProfondità esplorata = " + str(depth) \
+#             #            + "\nMossa corrente = " + str(a) + "\nState = " + str(state) + "\n----------------------\n\n"
+#             # if logger is not None:
+#             #     logger.info_message(to_print)
+#
+#             # print("Giocatore = " + state.to_move)
+#             # print("Profondità esplorata = " + str(depth))
+#             # print("Mossa corrente = " + str(a))
+#             # print("State = " + str(state))
+#             # print("----------------------\n\n")
+#             v = max(v, min_value(game.result(state, a),
+#                                  alpha, beta, depth + 1))
+#             if v >= beta:
+#                 return v
+#             alpha = max(alpha, v)
+#         return v
+#
+#     def min_value(state, alpha, beta, depth):
+#         if cutoff_test(state, depth):
+#             eval_value = eval_fn(state, player)
+#
+#             to_print = "Eval value = " + str(eval_value) + "\nStato della eval = " + str(state) \
+#                        + "\n----------------------\n\n"
+#             # if logger is not None:
+#             #     logger.info_message(to_print)
+#             # print("Eval value = " + str(eval_value))
+#             # print("----------------------\n\n")
+#
+#             return eval_value
+#         v = infinity
+#         for a in game.actions(state):
+#             # to_print = "Giocatore = " + state.to_move + "\nProfondità esplorata = " + str(depth) \
+#             #            + "\nMossa corrente = " + str(a) + "\nState = " + str(state) + "\n----------------------\n\n"
+#             # if logger is not None:
+#             #     logger.info_message(to_print)
+#             # print("Giocatore = " + state.to_move)
+#             # print("Profondità esplorata = " + str(depth))
+#             # print("Mossa corrente = " + str(a))
+#             # print("State = " + str(state))
+#             # print("----------------------\n\n")
+#             v = min(v, max_value(game.result(state, a),
+#                                  alpha, beta, depth + 1))
+#             if v <= alpha:
+#                 return v
+#             beta = min(beta, v)
+#         return v
+#
+#     # Body of alphabeta_cutoff_search starts here:
+#     # The default test cuts off at depth d or at a terminal state
+#     cutoff_test = (cutoff_test or cut_off_timer)
+#     eval_fn = eval_fn or (lambda state: game.utility(state, player))
+#     best_score = -infinity
+#     beta = infinity
+#     best_action = None
+#     for a in game.actions(state):
+#         to_print = "Giocatore = " + state.to_move + "\nProfondità esplorata = " + str(0) \
+#                    + "\nMossa corrente = " + str(a) + "\nState = " + str(state) + "\n----------------------\n\n"
+#         # if logger is not None:
+#         #     logger.info_message(to_print)
+#
+#         # print("Giocatore = " + state.to_move)
+#         # print("Profondità esplorata = " + str(0))
+#         # print("Mossa corrente = " + str(a))
+#         # print("State = " + str(state))
+#         # print("----------------------\n\n")
+#         v = min_value(game.result(state, a), best_score, beta, 1)
+#         if v > best_score:
+#             best_score = v
+#             best_action = a
+#
+#     if logger is not None:
+#         logger.info_message("State finale = " + str(state) + "\n")
+#         logger.info_message("best score = " + str(best_score) + "\n")
+#         logger.info_message("******* BEST ACTION = " + str(best_action) + " *******\n\n")
+#     return best_action

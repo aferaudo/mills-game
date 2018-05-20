@@ -4,7 +4,6 @@ from .. import MillsGame
 
 """Contiene l'euristica per la scelta della pedina da eliminare"""
 
-# TODO c'è qualcosa ancora che non va
 
 
 def delete_pieces_phase1(state, new_pos=None, debug=False):

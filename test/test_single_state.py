@@ -24,7 +24,6 @@ state_phase_two = GameState(to_move='W',
                                    'W', 'O', 'B', 'B', 'B', 'W', 'B', 'W', 'O', 'O', 'O', 'B'],
                             moves=[2, 3, 5, 13, 20, 21, 22, 9, 11], w_board=9, b_board=5, w_no_board=0, b_no_board=0)
 
-# TODO non funziona neanche cosi
 state_phase_two_duoble_game = GameState(to_move='W',
                                         utility=0,
                                         board=['B', 'O', 'O', 'W', 'O', 'O', 'W', 'W', 'W', 'W', 'O', 'O',
@@ -90,7 +89,7 @@ temp_two_state = GameState(to_move='W',
                            board=['B', 'B', 'W', 'O', 'W', 'W', 'W', 'W', 'B', 'O', 'W', 'B',
                                   'O', 'B', 'O', 'O', 'B', 'B', 'B', 'B', 'W', 'W', 'O', 'W'],
                            moves=[3, 14, 12, 15, 9, 22], w_board=9, b_board=9, w_no_board=0, b_no_board=0)
-# TODO testare loop partita
+
 look_delete = GameState(to_move='B',
                         utility=0,
                         board=['O', 'B', 'O', 'W', 'W', 'W', 'B', 'W', 'B', 'O', 'B', 'O',
@@ -102,7 +101,7 @@ loop_to_delete = GameState(to_move='B',
                            board=['O', 'B', 'O', 'W', 'W', 'W', 'B', 'B', 'O', 'O', 'B', 'O',
                                   'B', 'W', 'W', 'O', 'O', 'W', 'O', 'B', 'B', 'O', 'O', 'O'],
                            moves=[0, 11, 15, 18, 9, 22, 23, 21, 8, 16, 2], w_board=6, b_board=7, w_no_board=0, b_no_board=0)
-# TODO fare partita giocando da nero
+
 
 # millsGame.display(state_phase_three_start)
 # print("State = " + str(state_phase_three_start))

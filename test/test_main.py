@@ -188,7 +188,6 @@ print_current_move(millsGame, phase_two_state_2, phase_two_state_3, tup, 3)"""
 # x = int(input("Inserisci pedina da muovere "))
 # y = int(input("Inserisci la mossa "))
 # tup = (x, y, to_eliminate[0])
-# # TODO Problema: Se sposto una pedina che non è quella del turno corrente il programma lo permette.
 # phase_two_state_3 = millsGame.result(phase_two_state_2, tup)
 # millsGame.display(phase_two_state_3)
 # print(can_move(millsGame, phase_one_state, 'B'))
