@@ -1,5 +1,10 @@
 # Mills Game
-Project for University AI contest - FuffaTeam
+Progetto per il contest di AI dell'università - FuffaTeam - UNIBO
+
+## Installation
+`git clone https://github.com/ale8193/mills-game.git`
+
+## How to run
 
 Per il collegamento con il server Engine eseguire prima il jar Interface.jar:
 
