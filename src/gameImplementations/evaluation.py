@@ -84,7 +84,7 @@ def eval_fn_smart(state, starter_player):
     player = state.to_move
     phase = check_phase(state.w_no_board, state.b_no_board, state.w_board, state.b_board, player)
 
-    victory = state.utility
+    victory = check_win_or_lose(state, starter_player)
 
     if phase == 1:
         return eval_fn_phase1(state, starter_player) + victory
@@ -194,7 +194,7 @@ def eval_fn_opponent(state, starter_player):
     player = state.to_move
     phase = check_phase(state.w_no_board, state.b_no_board, state.w_board, state.b_board, player)
 
-    victory = state.utility
+    victory = check_win_or_lose(state, starter_player)
 
     if phase == 1:
         return eval_fn_phase1_opponent(state, starter_player) + victory

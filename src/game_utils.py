@@ -593,3 +593,28 @@ def check_delete_win(game, state, move):
     state_copy = state
     new_state = game.result(state_copy, move)
     return abs(new_state.utility)
+
+
+def check_win_or_lose(state, player):
+    """
+    Controllo se in base allo stato il giocatore passato come parametro vince (allora return 1000),
+    perdere (allora return -1000) o non succede niente (allora return 0)
+    :param state:
+    :param player:
+    :return:
+    """
+
+    if player == 'W':
+        if state.b_board < 3 or (len(can_move(state, 'B')) == 0 and state.b_board > 3):
+            return 1000
+        elif state.w_board < 3 or (len(can_move(state, 'W')) == 0 and state.w_board > 3):
+            return -1000
+        else:
+            return 0
+    else:
+        if state.w_board < 3 or (len(can_move(state, 'W')) == 0 and state.w_board > 3):
+            return 1000
+        elif state.b_board < 3 or (len(can_move(state, 'B')) == 0 and state.b_board > 3):
+            return -1000
+        else:
+            return 0

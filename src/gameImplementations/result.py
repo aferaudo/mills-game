@@ -92,9 +92,9 @@ def compute_utility(state, w_no_board, b_no_board, w_board, b_board):
         else:
             return 0
     else:
-        if state.to_move == 'W' and (b_board == 2 or len(can_move(state, 'B')) == 0):
+        if state.to_move == 'W' and (b_board == 2 or (len(can_move(state, 'B')) == 0 and b_board > 3)):
             return victory_value
-        elif state.to_move == 'B' and (w_board == 2 or len(can_move(state, 'W')) == 0):
+        elif state.to_move == 'B' and (w_board == 2 or (len(can_move(state, 'W')) == 0) and w_board > 3):
             return -victory_value
         else:
             return 0

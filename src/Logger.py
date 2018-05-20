@@ -13,22 +13,26 @@ class Logger:
         """
         Questo costruttore inizializza le impostazioni per il logger
         """
-        self.logger = logging.getLogger('fuff_team_logger')
+        self.logger = logging.getLogger('fuffa_team_logger')
         self.logger.setLevel(logging.INFO)
-        self.formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         dir_path = path.dirname(__file__)
         root_dir = path.normpath(dir_path + '/..')
         self.log_path = path.normpath(root_dir + '/log')
         self.temp_path = path.normpath(self.log_path + '/tmp-state')
 
-    def init_log_file(self):
+    def init_log_file(self, file_name, use_time_stamp=True):
         """
         Inizializza il file del log creando un file con un time stamp diverso ogni volta
         :return:
         """
-        now = get_current_time()
-        log_path_file = path.normpath(self.log_path + '/' + str(now) + '.log')
-        logging.basicConfig(filename=log_path_file, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        if use_time_stamp:
+            now = get_current_time()
+            file_name = file_name + '_' + str(now) + '.log'
+        else:
+            file_name = file_name + '.log'
+
+        log_path_file = path.normpath(self.log_path + '/' + file_name)
+        logging.basicConfig(filename=log_path_file, format='%(asctime)s - %(name)s - %(levelname)s \n\n%(message)s')
 
     def info_message(self, message):
         """
