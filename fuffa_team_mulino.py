@@ -52,30 +52,56 @@ def string_to_state(stringa, our_color):
 
 def main(argv):
     # prendiamo in ingresso da terminale il colore del giocatore
+    colored = False
     our_color = None
     try:
-        opts, args = getopt.getopt(argv, "wbh")
+        opts, args = getopt.getopt(argv, "wbht:d:")
     except getopt.GetoptError:
-        print('usage: fuffa_team_mulino.py -w (player white) -o (player black)')
+        print('usage: fuffa_team_mulino.py -w (player white) -b (player black) -h (see option)')
         sys.exit(2)
-    if len(opts) != 1:
-        print('usage: fuffa_team_mulino.py -w (player white) -b (player black)')
+    if len(opts) < 1:
+        print('usage: fuffa_team_mulino.py -w (player white) -b (player black) -h (see option)')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('usage: fuffa_team_mulino.py -w (player white) -b (player black)')
+            print('usage: fuffa_team_mulino.py\n-w (player white)\n-b (player black)\n'
+                  '-t <timer>\n-d <profondità>')
             sys.exit()
         elif opt == '-w':
-            our_color = 'W'
+            if not colored:
+                our_color = 'W'
+                colored = True
+            else:
+                print("specify one player only\nusage: fuffa_team_mulino.py -w (player white) "
+                      "-b (player black) -h (see option)')")
+                sys.exit(1)
         elif opt == '-b':
-            our_color = 'B'
+            if not colored:
+                our_color = 'B'
+                colored = True
+            else:
+                print("specify one player only\nusage: fuffa_team_mulino.py -w (player white) "
+                      "-b (player black) -h (see option)')")
+                sys.exit(1)
+        elif opt == '-t':
+            try:
+                time_depth = int(arg)
+            except:
+                print("time argument must be an int\nusage: fuffa_team_mulino.py -w (player white) "
+                      "-b (player black) -h (see option)')")
+                sys.exit(1)
+        elif opt == '-d':
+            try:
+                depth = int(arg)
+            except:
+                print("time argument must be an int\nusage: fuffa_team_mulino.py -w (player white) "
+                      "-b (player black) -h (see option)')")
+                sys.exit(1)
     if our_color is None:
-        print('please specify a player\nusage: fuffa_team_mulino.py -w (player white) -o (player black)')
+        print('please specify a player\nusage: fuffa_team_mulino.py -w (player white) -b (player black) -h (see option)')
         sys.exit(2)
 
-    stringa = "OBWOOOOOWWBBOBWOOOOOWWBB-First-6,6-3,3"
-    state = string_to_state(stringa, our_color)
-    print(str(state))
+    print("giocatore: " + our_color + "\nprofondità: " + str(depth) + "\ntimer impostato: " + str(time_depth))
 
     # Creazione socket
     python_port = 3033
