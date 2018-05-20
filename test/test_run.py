@@ -9,9 +9,9 @@ from src.Logger import Logger
 import time
 import random
 
-depth = 10
+depth = 11
 depth_opponent = depth
-time_depth = 50
+time_depth = 100
 cut_off = None
 eval_fn = eval_fn_smart
 eval_fn_opponent = eval_fn_smart

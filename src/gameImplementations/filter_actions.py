@@ -112,7 +112,7 @@ def filter_phase2(state):
     moves = []
 
     # TODO Controllare pesi (da fare alla fine)
-    player_will_tris = 10
+    player_will_tris = 15
     player_tris_trick = 7
     player_couple = 2
     player_double_game = 5
@@ -187,7 +187,7 @@ def filter_phase3(state):
     # TODO Controllare pesi (da fare alla fine)
     player_will_tris = 20
     player_couple_game = 2
-    opponent_will_tris = 10
+    opponent_will_tris = 25
     piece_to_not_move = 15
     player_couple_game_possible_muvment = 5
 

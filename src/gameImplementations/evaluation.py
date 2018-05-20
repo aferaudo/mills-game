@@ -73,10 +73,28 @@ def eval_fn_num_adjacents(state, starter_player, weight):
         return (adjacents_b - adjacents_w) * weight
 
 
+def eval_fn_three_opponent_pieces(state, starter_player, weight):
+    """
+    Valuta se l'avversario finirà in fase 3 o no
+    :param state:
+    :param starter_player:
+    :param weight:
+    :return:
+    """
+
+    if starter_player == 'W' and state.b_board == 3:
+        return weight
+    elif starter_player == 'B' and state.w_board == 3:
+        return weight
+    else:
+        return 0
+
+
 def eval_fn_smart(state, starter_player):
     """
     È la nostra eval generica che in base alla fase sceglie quale funzione usare per valutare lo stato
     :param state:
+    :param starter_player
     :return:
     """
     # implementare con diverse fasi
@@ -84,7 +102,9 @@ def eval_fn_smart(state, starter_player):
     player = state.to_move
     phase = check_phase(state.w_no_board, state.b_no_board, state.w_board, state.b_board, player)
 
-    victory = check_win_or_lose(state, starter_player)
+    victory = state.utility
+    if starter_player == 'B':
+        victory = victory * -1
 
     if phase == 1:
         return eval_fn_phase1(state, starter_player) + victory
@@ -119,8 +139,6 @@ def eval_fn_phase1(state, starter_player):
     # calcoliamo la differenza tra il numero di tris dei giocatori
     evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
-    #print(evaluation)
-
     return evaluation
 
 
@@ -135,6 +153,7 @@ def eval_fn_phase2(state, starter_player):
     num_pieces_weight = 100
     num_adjacents_weight = 2
     num_tris_weight = 3
+    opponent_with_three_weight = 150
 
     player = state.to_move
     opponent = "B" if player == "W" else "W"
@@ -149,6 +168,9 @@ def eval_fn_phase2(state, starter_player):
     # calcoliamo la differenza tra il numero di tris dei giocatori
     evaluation += eval_fn_num_tris(state, starter_player, num_tris_weight)
 
+    # valuto se l'avversario rimane con 3 pedine
+    evaluation += eval_fn_three_opponent_pieces(state, starter_player, opponent_with_three_weight)
+
     # print(evaluation)
 
     return evaluation
@@ -162,7 +184,7 @@ def eval_fn_phase3(state, starter_player):
         """
 
     # pesi per le sub eval
-    num_pieces_weight = 1
+    num_pieces_weight = 100
     num_adjacents_weight = 0
     num_tris_weight = 3
 
@@ -194,7 +216,9 @@ def eval_fn_opponent(state, starter_player):
     player = state.to_move
     phase = check_phase(state.w_no_board, state.b_no_board, state.w_board, state.b_board, player)
 
-    victory = check_win_or_lose(state, starter_player)
+    victory = state.utility
+    if starter_player == 'B':
+        victory = victory * -1
 
     if phase == 1:
         return eval_fn_phase1_opponent(state, starter_player) + victory
