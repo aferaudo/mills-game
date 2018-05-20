@@ -76,13 +76,27 @@ class Logger:
         return GameState(
             to_move=str(state_elements[0]),
             utility=int(state_elements[1]),
-            board=state_elements[2],
-            moves=state_elements[3],
+            board=set_list_items(state_elements[2]),
+            moves=set_list_items(state_elements[3], False),
             w_board=int(state_elements[4]),
             b_board=int(state_elements[5]),
             w_no_board=int(state_elements[6]),
             b_no_board=int(state_elements[7])
         )
+
+
+def set_list_items(string_items, is_string=True):
+    string_items = string_items.replace("[", "").replace("]", "")
+    all_items = str(string_items).split(',')
+
+    new_list = []
+    for item in all_items:
+        if is_string:
+            new_list.append(str(item).replace("'", '').replace('"', '').strip())
+        else:
+            new_list.append(int(str(item).replace("'", '').replace('"', '').strip()))
+
+    return new_list
 
 
 def get_current_time():
