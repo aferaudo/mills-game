@@ -303,7 +303,7 @@ def test_all_game(game, mode=2, starter_state=None):
     iteration = 1
     old_phase = 0
 
-    depth = 10
+    depth_run = 10
 
     current_state = starter_state or game.initial
 
@@ -319,9 +319,11 @@ def test_all_game(game, mode=2, starter_state=None):
                             current_state.b_board, current_state.to_move)
 
         if phase == 1:
-            depth = 10
+            depth_run = 10
+        elif phase == 2:
+            depth_run = 12
         else:
-            depth = 11
+            depth_run = 11
 
         if phase != old_phase:
             old_phase = phase
@@ -332,7 +334,7 @@ def test_all_game(game, mode=2, starter_state=None):
 
             if current_state.to_move == 'W':
                 start_time = time.time()
-                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+                next_move = alphabeta_cutoff_search(current_state, game, depth_run, cut_off, eval_fn, time_depth)
                 end_time = time.time() - start_time
                 print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
             else:
@@ -356,9 +358,9 @@ def test_all_game(game, mode=2, starter_state=None):
 
             start_time = time.time()
             if current_state.to_move == 'W':
-                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+                next_move = alphabeta_cutoff_search(current_state, game, depth_run, cut_off, eval_fn, time_depth)
             else:
-                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn_opponent, time_depth)
+                next_move = alphabeta_cutoff_search(current_state, game, depth_run, cut_off, eval_fn_opponent, time_depth)
             end_time = time.time() - start_time
             print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
 
@@ -375,7 +377,7 @@ def test_all_game(game, mode=2, starter_state=None):
 
             if current_state.to_move == 'W':
                 start_time = time.time()
-                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+                next_move = alphabeta_cutoff_search(current_state, game, depth_run, cut_off, eval_fn, time_depth)
                 end_time = time.time() - start_time
                 print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
             else:
@@ -423,7 +425,7 @@ def test_all_game(game, mode=2, starter_state=None):
                 print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
             else:
                 start_time = time.time()
-                next_move = alphabeta_cutoff_search(current_state, game, depth, cut_off, eval_fn, time_depth)
+                next_move = alphabeta_cutoff_search(current_state, game, depth_run, cut_off, eval_fn, time_depth)
                 end_time = time.time() - start_time
                 print("******* TEMPO IMPIEGATO = %s seconds" % end_time)
 

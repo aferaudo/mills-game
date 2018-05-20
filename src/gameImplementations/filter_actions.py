@@ -64,7 +64,8 @@ def filter_phase1(state):
         # valuto se facciamo un doppio gioco o coppia
         check_couples_num = check_couples(state, move, player)
         if check_couples_num == 2:
-            value += check_couples_num * double_game
+            if (opponent == 'W' and state.w_no_board > 1) or (opponent == 'B' and state.b_no_board > 1):
+                value += check_couples_num * double_game
         else:
             value += check_couples_num * couple
 
@@ -115,7 +116,7 @@ def filter_phase2(state):
     player_double_game = 5
     opponent_tris_will_unlock = -5
 
-    num_moves_to_return = 4
+    num_moves_to_return = 3
 
     player = state.to_move
     opponent = "B" if player == "W" else "W"

@@ -137,6 +137,8 @@ def main(argv):
                             current_state.b_board, current_state.to_move)
         if phase == 1:
             depth = 10
+        elif phase == 2:
+            depth = 13
         else:
             depth = 11
         next_move = alphabeta_cutoff_search(current_state, mills_game, depth, cut_off, eval_fn, time_depth)
@@ -152,10 +154,7 @@ def main(argv):
         current_state = string_to_state(state_board, our_color)
         print("Mossa ricevuta!")
         print("\n\nNuovo stato dopo la mossa: " + str(current_state))
-        # mills_game.display(current_state)
-        # print("\n\n")
-        # print(current_state)
-        # print("\n\n")
+    
 
     #time.sleep(20)
     #chiusura socket
