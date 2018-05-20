@@ -373,7 +373,7 @@ def test_all_game(game, mode=2):
                     next_move = int(input("Dove vuoi metterla \n"))
                 else:
                     next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
-                if check_tris(current_state.board, -1, next_move, 'B'):
+                if check_tris(current_state.board, old_pos, next_move, 'B'):
                     delete_pos = int(input(
                         "Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
                 else:
@@ -400,7 +400,7 @@ def test_all_game(game, mode=2):
                     next_move = int(input("Dove vuoi metterla \n"))
                 else:
                     next_move = int(input("Inserisci la tua mossa tra queste " + str(current_state.moves) + "\n"))
-                if check_tris(current_state.board, -1, next_move, 'W'):
+                if check_tris(current_state.board, old_pos, next_move, 'W'):
                     delete_pos = int(input(
                         "Quale pedina avversaria vuoi eliminare tra queste: \n" + str(can_eliminate(current_state))))
                 else:
