@@ -4,6 +4,7 @@ from src.MillsGame import MillsGame
 from core.algorithm.aima_alg import *
 from src.game_utils import *
 from src.gameImplementations.evaluation import *
+from src.Logger import Logger
 
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
@@ -107,6 +108,10 @@ loop_to_delete = GameState(to_move='B',
 # print("State = " + str(state_phase_three_start))
 # moves = millsGame.actions(state_phase_three_start)
 # print("Moves = " + str(moves))
+
+# logger = Logger()
+
+# logger.save_state(look_delete, 'look_delete.txt')
 
 millsGame.display(state_run_error_due)
 print("State = " + str(state_run_error_due))
