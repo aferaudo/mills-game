@@ -5,9 +5,9 @@ from src.gameImplementations.evaluation import *
 
 GameState = namedtuple('GameState', 'to_move, utility, board, moves, w_board, b_board, w_no_board, b_no_board')
 
-depth = 10
+depth = 12
 depth_opponent = depth
-time_depth = 100
+time_depth = 58
 cut_off = None
 eval_fn = eval_fn_smart
 eval_fn_opponent = eval_fn_opponent
@@ -25,11 +25,11 @@ def string_to_state(stringa, our_color):
         if v == "O":
             moves.append(x)
 
-    w_board = int(info_server[2].split(",")[0])
-    b_board = int(info_server[2].split(",")[1])
+    w_board = int(info_server[3].split(",")[0])
+    b_board = int(info_server[3].split(",")[1])
 
-    w_no_board = int(info_server[3].split(",")[0])
-    b_no_board = int(info_server[3].split(",")[1])
+    w_no_board = int(info_server[2].split(",")[0])
+    b_no_board = int(info_server[2].split(",")[1])
 
     temp_state = GameState(to_move=('B' if our_color == 'W' else 'W'),
                            utility=0,
@@ -109,14 +109,20 @@ def main(argv):
         next_move = alphabeta_cutoff_search(current_state, mills_game, depth, cut_off, eval_fn, time_depth)
         print("Scrivo la mia mossa: " + str(next_move))
         python_socket.my_send(str(next_move).encode("UTF-8"))
-
+        print("Mossa inviata!")
+        print("Attendo il nuovo stato calcolato in base alla mia mossa...")
         state_board = python_socket.receive()
-        print("Che sto facendo?")
+        print("\n\nStato ricevuto: " + state_board)
+
+        print("Attendo la mossa dell'avversario...")
+        state_board = python_socket.receive()
         current_state = string_to_state(state_board, our_color)
-        mills_game.display(current_state)
-        print("\n\n")
-        print(current_state)
-        print("\n\n")
+        print("Mossa ricevuta!")
+        print("\n\nNuovo stato dopo la mossa: " + str(current_state))
+        # mills_game.display(current_state)
+        # print("\n\n")
+        # print(current_state)
+        # print("\n\n")
 
     #time.sleep(20)
     #chiusura socket
