@@ -1,5 +1,5 @@
 # Mills Game
-Progetto per il contest di AI dell'università - FuffaTeam - UNIBO
+Project for the AI contest at UNIBO by the FuffaTeam
 
 ## Installation
 `git clone https://github.com/ale8193/mills-game.git`
