@@ -6,7 +6,7 @@ Project for the AI contest at UNIBO by the FuffaTeam
 
 ## How to run
 
-Per il collegamento con il server Engine eseguire prima il jar Interface.jar:
+il collegamento con il server Engine eseguiPerre prima il jar Interface.jar:
 
 `java -jar Interface.jar`
 
