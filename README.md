@@ -6,7 +6,7 @@ Project for the AI contest at UNIBO by the FuffaTeam
 
 ## How to run
 
-il collegamento con il server Engine eseguiPerre prima il jar Interface.jar:
+Per il collegamento con il server Engine eseguire prima il jar Interface.jar:
 
 `java -jar Interface.jar`
 
@@ -17,7 +17,7 @@ se il giocatore scelto è il white:
 
 `python3 fuffa_team_mulino.py -w`
 
-È possibile configurare altri parametri (-h per i vari utilizzi)
+È possibile configurare altri parametri (-h per i vari utilizzi): NON ANCORA ABILITATI.
 
 
 N.B. È richiesta una versione di python superiore alla 3.
